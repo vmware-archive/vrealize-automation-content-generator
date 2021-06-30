@@ -1,0 +1,8 @@
+{
+  "createDefaultZones" : true,
+  "enabledRegionIds" : [ "dummyId" ],
+  "enabledRegions" : [ {
+    "name" : "Datacenter",
+    "regionId" : "dummyId"
+  } ]
+}

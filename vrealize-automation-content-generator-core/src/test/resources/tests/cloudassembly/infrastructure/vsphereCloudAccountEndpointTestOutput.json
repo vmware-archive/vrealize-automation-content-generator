@@ -1,0 +1,14 @@
+{
+  "customProperties" : {
+    "isExternal" : "false"
+  },
+  "endpointProperties" : {
+    "acceptSelfSignedCertificate" : true,
+    "certificate" : "fakeCert",
+    "dcId" : "onprem",
+    "hostName" : "my-vc-url",
+    "privateKey" : "password",
+    "privateKeyId" : "administrator@vsphere.local"
+  },
+  "endpointType" : "vsphere"
+}

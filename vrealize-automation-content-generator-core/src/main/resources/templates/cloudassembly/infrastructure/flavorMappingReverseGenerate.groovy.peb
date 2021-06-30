@@ -1,0 +1,18 @@
+import com.vmware.devops.model.cloudassembly.infrastructure.FlavorMapping
+import com.vmware.devops.model.cloudassembly.infrastructure.NimbusCloudAccount.NimbusFlavor
+import com.vmware.devops.model.cloudassembly.infrastructure.VsphereCloudAccount.VsphereFlavor
+
+return FlavorMapping.builder()
+        .name("{{entity.name}}")
+        .flavorMapping([
+                {%- for mapping in entity.flavorMapping | flavorMapping("nimbus") | sortMap %}
+                "{{mapping.getKey()}}": NimbusFlavor.DEFAULT,
+                {%- endfor %}
+                {%- for mapping in entity.flavorMapping | flavorMapping("vsphere") | sortMap %}
+                "{{mapping.getKey()}}": VsphereFlavor.builder()
+                            .cpuCount({{mapping.getValue().getCpuCount()}})
+                            .memoryMb({{mapping.getValue().getMemoryMb()}})
+                            .build(),
+                {%- endfor %}
+        ])
+        .build();

@@ -1,0 +1,6 @@
+{
+  "content" : "---\nformatVersion: 1\ninputs:\n  hello:\n    type: \"string\"\n    default: \"world\"\n  test_x:\n    type: \"string\"\n    default: \"y\"\nresources:\n  machine:\n    type: \"Cloud.Machine\"\n    properties:\n      flavor: \"default\"\n      image: \"test-image\"\n      test:x: \"${input.test_x}\"\n",
+  "name" : "vrealize-automation-content-generator-test",
+  "projectId" : "test-id",
+  "requestScopeOrg" : false
+}

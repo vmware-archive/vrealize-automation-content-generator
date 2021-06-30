@@ -1,0 +1,52 @@
+import com.vmware.devops.model.codestream.GerritTrigger
+
+return GerritTrigger.builder()
+        .name("{{ entity.name }}")
+        .project("{{ entity.project }}")
+        .gerritProject("{{ entity.gerritProject }}")
+        .branch("{{ entity.branch }}")
+         {%- for configuration in entity.configurations %}
+        .configurations([
+                GerritTrigger.Configuration.builder()
+                        .pipeline("{{ configuration.pipeline }}")
+                        .eventType(com.vmware.devops.client.codestream.stubs.GerritTrigger.Configuration.EventType.{{ configuration.eventType }})
+                        {% if configuration.input is not empty -%}
+                        .input([
+                                {%- for input in configuration.input | sortMap %}
+                                "{{ input.key }}": "{{ input.value }}",
+                                {%- endfor %}
+                        ])
+                        {% endif -%}
+                        {% if configuration.failureComment is not empty -%}
+                        .failureComment("{{ configuration.failureComment }}")
+                        {% endif -%}
+                        {% if configuration.successComment is not empty -%}
+                        .successComment("{{ configuration.successComment }}")
+                        {% endif -%}
+                        .build(),
+        ])
+        {%- endfor %}
+        {% if entity.inclusions is not empty -%}
+        .inclusions([
+                {%- for inclusion in entity.inclusions %}
+                GerritTrigger.Pattern.builder()
+                        .type(com.vmware.devops.client.codestream.stubs.GerritTrigger.Pattern.PatternType.{{ inclusion.type }})
+                        .value("{{ inclusion.value }}")
+                        .build(),
+                {%- endfor %}
+        ])
+        {% endif -%}
+        {% if entity.exclusions is not empty -%}
+        .exclusions([
+                {%- for exclusion in entity.exclusions %}
+                GerritTrigger.Pattern.builder()
+                        .type(com.vmware.devops.client.codestream.stubs.GerritTrigger.Pattern.PatternType.{{ exclusion.type }})
+                        .value("{{ exclusion.value }}")
+                        .build(),
+                {%- endfor %}
+        ])
+        {% endif -%}
+        .prioritizeExclusion({{ entity.prioritizeExclusion }})
+        .enabled({{ entity.enabled }})
+        .listener("{{ entity.listener }}")
+        .build()

@@ -1,0 +1,10 @@
+import com.vmware.devops.model.cloudassembly.infrastructure.ImageMapping
+
+return ImageMapping.builder()
+        .name("{{ entity.name }}")
+        .imageMapping([
+            {%- for mapping in entity.imageMapping | sortMap %}
+            "{{mapping.getKey()}}": "{{mapping.getValue()}}",
+            {%- endfor %}
+        ])
+        .build()

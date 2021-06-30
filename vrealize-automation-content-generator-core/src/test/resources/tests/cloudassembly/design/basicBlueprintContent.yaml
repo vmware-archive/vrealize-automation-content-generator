@@ -1,0 +1,16 @@
+---
+formatVersion: 1
+inputs:
+  hello:
+    type: "string"
+    default: "world"
+  test_x:
+    type: "string"
+    default: "y"
+resources:
+  machine:
+    type: "Cloud.Machine"
+    properties:
+      flavor: "default"
+      image: "test-image"
+      test:x: "${input.test_x}"

@@ -1,0 +1,13 @@
+import com.vmware.devops.model.codestream.JenkinsEndpoint
+
+return JenkinsEndpoint.builder()
+        .name("{{ entity.name }}")
+        .project("{{ entity.project }}")
+        .url("{{ entity.url }}")
+        .username("{{ entity.username }}")
+        .password("{{ entity.password }}")
+        .pollInterval({{ entity.pollInterval }})
+        .retryCount({{ entity.retryCount }})
+        .retryWaitSeconds({{ entity.retryWaitSeconds }})
+        .cloudProxy("{{ entity.cloudProxy }}")
+        .build()

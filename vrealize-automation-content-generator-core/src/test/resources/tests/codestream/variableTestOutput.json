@@ -1,0 +1,7 @@
+{
+  "project" : "testProjectName",
+  "name" : "test-vrealize-automation-content-generator-var",
+  "type" : "REGULAR",
+  "value" : "test-vrealize-automation-content-generator-var-value",
+  "kind" : "VARIABLE"
+}

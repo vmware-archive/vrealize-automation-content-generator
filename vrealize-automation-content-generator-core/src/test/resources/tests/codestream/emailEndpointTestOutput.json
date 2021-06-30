@@ -1,0 +1,15 @@
+{
+  "cloudProxyId" : "fakeId",
+  "name" : "test",
+  "project" : "testProjectName",
+  "properties" : {
+    "encryptionMethod" : "TLS",
+    "outboundHost" : "test-host",
+    "outboundPassword" : "${var.test-endpoint-password}",
+    "outboundPort" : 25,
+    "outboundProtocol" : "smtp",
+    "outboundUsername" : "test-user",
+    "senderAddress" : "test-address"
+  },
+  "type" : "email"
+}

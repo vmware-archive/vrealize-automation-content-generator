@@ -1,0 +1,15 @@
+import com.vmware.devops.client.codestream.stubs.Endpoint
+import com.vmware.devops.model.codestream.EmailEndpoint
+
+return EmailEndpoint.builder()
+        .name("{{ entity.name }}")
+        .project("{{ entity.project }}")
+        .outboundHost("{{ entity.outboundHost }}")
+        .outboundPort({{ entity.outboundPort }})
+        .outboundUsername("{{ entity.outboundUsername }}")
+        .outboundPassword("{{ entity.outboundPassword }}")
+        .outboundProtocol(Endpoint.EmailProtocol.{{ entity.outboundProtocol.name }})
+        .senderAddress("{{ entity.senderAddress }}")
+        .encryptionMethod(Endpoint.EmailEncryptionMethod.{{ entity.encryptionMethod.name }})
+        .cloudProxy("{{ entity.cloudProxy }}")
+        .build()

@@ -1,0 +1,17 @@
+{
+  "actionType" : "SCRIPT",
+  "dependencies" : "a==1.0.0\nb>=1.1.0",
+  "entrypoint" : "handle",
+  "inputs" : {
+    "b" : true,
+    "i" : 1,
+    "s" : "Hello"
+  },
+  "name" : "test-action",
+  "projectId" : "fakeId",
+  "runtime" : "python",
+  "scriptSource" : 0,
+  "shared" : true,
+  "source" : "def handler(context, inputs):\n    greeting = \"Hello, {0}!\".format(inputs[\"target\"])\n    print(greeting)\n\n    outputs = {\n      \"greeting\": greeting\n    }\n\n    return outputs\n",
+  "timeoutSeconds" : 60
+}

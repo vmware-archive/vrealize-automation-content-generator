@@ -1,0 +1,66 @@
+{
+  "concurrency" : 20,
+  "enabled" : true,
+  "input" : { },
+  "kind" : "PIPELINE",
+  "name" : "poll-test",
+  "notifications" : {
+    "email" : [ ],
+    "jira" : [ ],
+    "webhook" : [ ]
+  },
+  "output" : {
+    "globalKey" : "${stage-1.poll-task-2.output.localKey}"
+  },
+  "project" : "testProjectName",
+  "stageOrder" : [ "stage-1" ],
+  "stages" : {
+    "stage-1" : {
+      "taskOrder" : [ "poll-task-1", "poll-task-2" ],
+      "tasks" : {
+        "poll-task-1" : {
+          "endpoints" : {
+            "agent" : "agent"
+          },
+          "ignoreFailure" : false,
+          "input" : {
+            "exitCriteria" : {
+              "failure" : "",
+              "success" : ""
+            },
+            "headers" : {
+              "Accept" : "application/json",
+              "Content-Type" : "application/json"
+            },
+            "ignoreFailure" : false,
+            "pollCount" : 0,
+            "pollIntervalSeconds" : 60,
+            "url" : "https://vmware.com"
+          },
+          "type" : "POLL"
+        },
+        "poll-task-2" : {
+          "endpoints" : {
+            "agent" : "testAgent"
+          },
+          "ignoreFailure" : false,
+          "input" : {
+            "exitCriteria" : {
+              "failure" : "false == false",
+              "success" : "true == true"
+            },
+            "headers" : {
+              "Accept" : "application/json",
+              "Content-Type" : "application/json"
+            },
+            "ignoreFailure" : true,
+            "pollCount" : 10000,
+            "pollIntervalSeconds" : 120,
+            "url" : "https://vmware.com"
+          },
+          "type" : "POLL"
+        }
+      }
+    }
+  }
+}

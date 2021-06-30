@@ -1,0 +1,55 @@
+{
+  "concurrency" : 20,
+  "enabled" : true,
+  "input" : {
+    "globalPipelineInput" : "globalPipelineInputValue",
+    "pipelineInput" : "defaultValue",
+    "pipelineInput2" : "defaultValue2"
+  },
+  "kind" : "PIPELINE",
+  "name" : "test",
+  "notifications" : {
+    "email" : [ ],
+    "jira" : [ ],
+    "webhook" : [ ]
+  },
+  "output" : {
+    "globalKey" : "${stage-1.task-1.output.localKey}"
+  },
+  "project" : "testProjectName",
+  "stageOrder" : [ "stage-1" ],
+  "stages" : {
+    "stage-1" : {
+      "taskOrder" : [ "task-1", "task-1-1" ],
+      "tasks" : {
+        "task-1" : {
+          "endpoints" : {
+            "jenkinsServer" : "my-jenkins-endpoint"
+          },
+          "ignoreFailure" : false,
+          "input" : {
+            "job" : "job-1",
+            "parameters" : {
+              "anotherPipelineInput" : "${input.globalPipelineInput}",
+              "localInput" : "defaultValue",
+              "pipelineInput" : "${input.pipelineInput}",
+              "pipelineInput2" : "${input.pipelineInput2}"
+            }
+          },
+          "type" : "Jenkins"
+        },
+        "task-1-1" : {
+          "endpoints" : {
+            "jenkinsServer" : "my-jenkins-endpoint"
+          },
+          "ignoreFailure" : false,
+          "input" : {
+            "job" : "job-1",
+            "parameters" : { }
+          },
+          "type" : "Jenkins"
+        }
+      }
+    }
+  }
+}

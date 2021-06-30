@@ -1,0 +1,37 @@
+{
+  "concurrency" : 20,
+  "enabled" : true,
+  "input" : {
+    "pipelineInput" : "defaultValue"
+  },
+  "kind" : "PIPELINE",
+  "name" : "test",
+  "notifications" : {
+    "email" : [ ],
+    "jira" : [ ],
+    "webhook" : [ ]
+  },
+  "output" : {
+    "globalKey" : "${stage-1.task-1.output.localKey}"
+  },
+  "project" : "testProjectName",
+  "stageOrder" : [ "stage-1" ],
+  "stages" : {
+    "stage-1" : {
+      "taskOrder" : [ "task-1" ],
+      "tasks" : {
+        "task-1" : {
+          "ignoreFailure" : false,
+          "input" : {
+            "inputProperties" : {
+              "localInput" : "defaultValue",
+              "pipelineInput" : "${input.pipelineInput}"
+            },
+            "pipeline" : "test"
+          },
+          "type" : "Pipeline"
+        }
+      }
+    }
+  }
+}

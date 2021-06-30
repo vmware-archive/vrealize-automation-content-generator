@@ -1,0 +1,112 @@
+<FindBugsFilter>
+    <Match>
+        <Class name="com.vmware.admiral.common.util.DelegatingX509KeyManager" />
+        <Method name="getAliasByRemoteCert" />
+        <Local name="handshakeSession" />
+        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.common.util.ServiceEndpoint" />
+        <Method name="setServiceUri" />
+        <Bug pattern="ME_ENUM_FIELD_SETTER" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.common.util.ServiceEndpoint" />
+        <Method name="setUseCspAuth" />
+        <Bug pattern="ME_ENUM_FIELD_SETTER" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.service.common.AbstractTaskStatefulService" />
+        <Method name="handlePatch" />
+        <Bug pattern="DM_EXIT" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.service.common.AbstractTaskStatefulService" />
+        <Bug pattern="NP_LOAD_OF_KNOWN_NULL_VALUE" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.service.vsphere.VSphereIncrementalEnumerationController" />
+        <Bug pattern="RC_REF_COMPARISON_BAD_PRACTICE_BOOLEAN" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.compute.ProxyFlatStorageProfileUtils" />
+        <Bug pattern="NP_LOAD_OF_KNOWN_NULL_VALUE" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.mcp.adapter.api.operations.AbstractResourceOperationService" />
+        <Bug pattern="NP_LOAD_OF_KNOWN_NULL_VALUE" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.telemetry.collectors.DisksTelemetryCollector" />
+        <Bug pattern="EC_UNRELATED_TYPES" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.request.ServiceAccessTaskService" />
+        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.request.ServiceAccessTaskService" />
+        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.request.ServiceAccessTaskService" />
+        <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.request.blueprint.BlueprintResourceDataUtil" />
+        <Bug pattern="BC_VACUOUS_INSTANCEOF" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.request.composition.CompositionTaskService" />
+        <Bug pattern="DLS_DEAD_LOCAL_STORE" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.request.compute.ComputeNetworkProvisionTaskService" />
+        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.request.compute.ComputeNetworkReconfigureTaskService" />
+        <Bug pattern="DM_BOXED_PRIMITIVE_FOR_PARSING" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.request.compute.ComputePlacementSelectionTaskService" />
+        <Bug pattern="BX_UNBOXING_IMMEDIATELY_REBOXED" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.request.compute.IPAddressAllocationTaskService$IPAddressAllocationContext" />
+        <Bug pattern="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.request.compute.ProfileQueryUtils" />
+        <Bug pattern="NP_LOAD_OF_KNOWN_NULL_VALUE" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.request.compute.allocation.filter.ComputeToStorageAffinityFilter" />
+        <Bug pattern="RC_REF_COMPARISON_BAD_PRACTICE_BOOLEAN" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.request.graph.ComponentStageProcessor" />
+        <Bug pattern="NP_LOAD_OF_KNOWN_NULL_VALUE" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.request.storage.AWSSpecificStorageUtils" />
+        <Bug pattern="DM_BOXED_PRIMITIVE_FOR_PARSING" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.iaas.api.service.multicloud.CloudAccountServiceBase" />
+        <Bug pattern="NP_LOAD_OF_KNOWN_NULL_VALUE" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.iaas.api.service.multicloud.converter.impl.StorageProfileVsphereConverter" />
+        <Bug pattern="ES_COMPARING_STRINGS_WITH_EQ" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.admiral.host.ProvisioningUpgradeStateHandler" />
+        <Bug pattern="VA_FORMAT_STRING_USES_NEWLINE" />
+    </Match>
+    <Match>
+        <Class name="com.vmware.mcp.adapter.api.statemachine.StatemachineInstance" />
+        <Method name="getNextState" />
+        <Bug pattern="UPM_UNCALLED_PRIVATE_METHOD" />
+    </Match>
+</FindBugsFilter>

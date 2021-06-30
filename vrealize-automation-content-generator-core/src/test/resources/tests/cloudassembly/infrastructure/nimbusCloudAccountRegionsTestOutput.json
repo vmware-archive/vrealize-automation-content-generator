@@ -1,0 +1,11 @@
+{
+  "createDefaultZones" : true,
+  "enabledRegionIds" : [ "sc", "wdc" ],
+  "enabledRegions" : [ {
+    "name" : "Santa Clara",
+    "regionId" : "sc"
+  }, {
+    "name" : "Washington DC",
+    "regionId" : "wdc"
+  } ]
+}

@@ -1,0 +1,27 @@
+{
+  "name" : "test",
+  "project" : "testProjectName",
+  "gerritProject" : "test-project",
+  "branch" : "master",
+  "listener" : "my-gerrit-listener",
+  "enabled" : true,
+  "configurations" : [ {
+    "pipeline" : "test-pipeline",
+    "eventType" : "change-merged",
+    "input" : {
+      "localInput" : "defaultValue"
+    },
+    "failureComment" : "Pipeline Failed",
+    "successComment" : "Pipeline Success"
+  } ],
+  "inclusions" : [ {
+    "type" : "REGEX",
+    "value" : "cicd/.*"
+  } ],
+  "exclusions" : [ {
+    "type" : "PLAIN",
+    "value" : "pipelines"
+  } ],
+  "prioritizeExclusion" : true,
+  "kind" : "GERRIT_TRIGGER"
+}

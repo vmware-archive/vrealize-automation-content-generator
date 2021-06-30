@@ -1,0 +1,16 @@
+import com.vmware.devops.model.cloudassembly.infrastructure.VsphereCloudAccount
+
+return VsphereCloudAccount.builder()
+        .name("{{entity.name}}")
+        .hostname("{{entity.hostname}}")
+        .username("{{entity.username}}")
+        .password("{{entity.password}}")
+        .datacenters([
+                {%- for datacenter in entity.datacenters%}
+                "{{datacenter}}",
+                {%- endfor %}
+        ])
+        {% if entity.cloudProxy is not empty -%}
+        .cloudProxy("{{entity.cloudProxy}}")
+        {% endif -%}
+        .build()

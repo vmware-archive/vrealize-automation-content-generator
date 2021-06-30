@@ -1,0 +1,40 @@
+{% if entity.runtime is not empty -%}
+import com.vmware.devops.client.cloudassembly.extensibility.stubs.Action.Runtime
+{% endif -%}
+import com.vmware.devops.model.cloudassembly.extensibility.Action
+{%- if entity.dependencies is not empty %}
+import com.vmware.devops.model.cloudassembly.extensibility.Action.Dependency
+import com.vmware.devops.model.cloudassembly.extensibility.Action.Dependency.Operation
+{%- endif %}
+
+return Action.builder()
+        .name("{{entity.name}}")
+        .contentPath("{{entity.contentPath}}")
+        {% if entity.runtime is not empty -%}
+        .entrypoint("{{entity.entrypoint}}")
+        {% endif -%}
+        {% if entity.inputs is not empty -%}
+        .inputs([
+                {%- for input in entity.inputs | sortMap %}
+                "{{input.key}}": "{{input.value}}",
+                {%- endfor %}
+        ])
+        {% endif -%}
+        .timeout({{entity.timeout}})
+        {% if entity.runtime is not empty -%}
+        .runtime(Runtime.{{entity.runtime.name}})
+        {% endif -%}
+        .shared({{entity.shared}})
+        .project("{{entity.project}}")
+        {% if entity.dependencies is not empty -%}
+        .dependencies([
+                {%- for dependency in entity.dependencies %}
+                Dependency.builder()
+                        .name("{{dependency.name}}")
+                        .operation(Operation.{{dependency.operation.name}})
+                        .version("{{dependency.version}}")
+                        .build(),
+                {%- endfor %}
+        ])
+        {% endif -%}
+        .build()

@@ -1,0 +1,260 @@
+import com.vmware.devops.client.codestream.stubs.Notification.Event
+import com.vmware.devops.model.codestream.*
+
+{%- macro jenkinsTask(task) %}
+                                JenkinsTask.builder()
+                                        .name("{{ task.name }}")
+                                        .preCondition("{{ task.preCondition }}")
+                                        .ignoreFailure({{ task.ignoreFailure }})
+                                        .job("{{ task.job }}")
+                                        .jobFolder("{{ task.jobFolder }}")
+                                        {% if task.inputs is not empty -%}
+                                        .inputs([
+                                                {%- for input in task.inputs | sortInputList %}
+                                                new Input("{{ input.key }}", "{{ input.value }}"),
+                                                {%- endfor %}
+                                        ])
+                                        {% endif -%}
+                                        .endpoint("{{ task.endpoint }}")
+                                        .build(),
+{%- endmacro %}
+{%- macro pollTask(task) %}
+                                PollTask.builder()
+                                        .name("{{ task.name }}")
+                                        .preCondition("{{ task.preCondition }}")
+                                        .ignoreFailure({{ task.ignoreFailure }})
+                                        .url("{{ task.url }}")
+                                        {% if task.headers is not empty -%}
+                                        .headers([
+                                                {%- for header in task.headers | sortMap %}
+                                                "{{ header.key }}": "{{ header.value }}",
+                                                {%- endfor %}
+                                        ])
+                                        {% endif -%}
+                                        .agent("{{ task.agent }}")
+                                        .successCriteria("{{ task.successCriteria }}")
+                                        .failureCriteria("{{ task.failureCriteria }}")
+                                        .pollCount({{ task.pollCount }})
+                                        .pollIntervalSeconds({{ task.pollIntervalSeconds }})
+                                        .ignoreIntermittentPollFailure({{ task.ignoreIntermittentPollFailure }})
+                                        .build(),
+{%- endmacro %}
+{%- macro restTask(task) %}
+                                RestTask.builder()
+                                        .name("{{ task.name }}")
+                                        .preCondition("{{ task.preCondition }}")
+                                        .ignoreFailure({{ task.ignoreFailure }})
+                                        .url("{{ task.url }}")
+                                        .payload("{{ task.payload }}")
+                                        {% if task.headers is not empty -%}
+                                        .headers([
+                                                {%- for header in task.headers | sortMap %}
+                                                "{{ header.key }}": "{{ header.value }}",
+                                                {%- endfor %}
+                                        ])
+                                        {% endif -%}
+                                        .action(com.vmware.devops.client.codestream.stubs.Task.RestInput.RestActions.{{ task.action.name }})
+                                        .agent("agent")
+                                        .build(),
+{%- endmacro %}
+{%- macro userOperationTask(task) %}
+                                UserOperationTask.builder()
+                                        .name("{{ task.name }}")
+                                        .preCondition("{{ task.preCondition }}")
+                                        .ignoreFailure({{ task.ignoreFailure }})
+                                        .summary("{{ task.summary }}")
+                                        .description("{{ task.description }}")
+                                        .approvers([
+                                                {%- for approver in task.approvers %}
+                                                "{{ approver }}",
+                                                {%- endfor %}
+                                        ])
+                                        .expirationInDays({{ task.expirationInDays }})
+                                        .sendEmail({{ task.sendEmail }})
+                                        .endpoint("{{ task.endpoint }}")
+                                        .build(),
+{%- endmacro %}
+{%- macro conditionTask(task) %}
+                                ConditionTask.builder()
+                                        .name("{{ task.name }}")
+                                        .preCondition("{{ task.preCondition }}")
+                                        .ignoreFailure({{ task.ignoreFailure }})
+                                        .condition("{{ task.condition }}")
+                                        .build(),
+{%- endmacro %}
+{%- macro pipelineTask(task) %}
+                                new PipelineTask().builder()
+                                        .name("{{ task.name }}")
+                                        .preCondition("{{ task.preCondition }}")
+                                        .ignoreFailure({{ task.ignoreFailure }})
+                                        {% if task.inputs is not empty -%}
+                                        .inputs([
+                                                {%- for input in task.inputs | sortInputList %}
+                                                new Input("{{ input.key }}", "{{ input.value }}"),
+                                                {%- endfor %}
+                                        ])
+                                        {% endif -%}
+                                        .build(),
+{%- endmacro %}
+{%- macro sshTask(task) %}
+                                SshTask.builder()
+                                        .name("{{ task.name }}")
+                                        .preCondition("{{ task.preCondition }}")
+                                        .ignoreFailure({{ task.ignoreFailure }})
+                                        .authentication(
+                                                {% if task.authentication.privateKey is empty -%}
+                                                new SshTask.SshTaskAuthentication("{{ task.authentication.username }}", "{{ task.authentication.password }}")
+                                                {%- else -%}
+                                                {%- if task.authentication.passphrase is empty -%}
+                                                new SshTask.SshTaskAuthentication("{{ task.authentication.username }}", "{{ task.authentication.privateKey }}", null)
+                                                {%- else -%}
+                                                new SshTask.SshTaskAuthentication(
+                                                        "{{ task.authentication.username }}",
+                                                        """{{ task.authentication.privateKey }}""",
+                                                        "{{ task.authentication.passphrase }}"
+                                                )
+                                                {%- endif -%}
+                                                {%- endif %}
+                                        )
+                                        {% if task.environmentVariables is not empty -%}
+                                        .environmentVariables([
+                                                {%- for envVar in task.environmentVariables | sortMap %}
+                                                "{{ envVar.key }}": "{{ envVar.value }}",
+                                                {%- endfor %}
+                                        ])
+                                        {% endif -%}
+                                        {% if task.arguments is not empty -%}
+                                        .arguments([
+                                                {%- for arg in task.arguments %}
+                                                "{{ arg }}",
+                                                {%- endfor %}
+                                        ])
+                                        {% endif -%}
+                                        .workingDirectory("{{ task.workingDirectory }}")
+                                        .scriptPath("{{ task.scriptPath }}")
+                                        .host("{{ task.host }}")
+                                        .build(),
+{%- endmacro %}
+
+return Pipeline.builder()
+        .enabled(false)
+        .project("{{entity.project}}")
+        .name("{{entity.name}}")
+        .description("{{entity.description}}")
+        {% if entity.inputs is not empty -%}
+        .inputs([
+                {%- for input in entity.inputs | sortMap %}
+                "{{ input.key }}": "{{ input.value }}",
+                {%- endfor %}
+        ])
+        {% endif -%}
+        {% if entity.outputs is not empty -%}
+        .outputs([
+                {%- for output in entity.outputs | sortMap %}
+                "{{ output.key }}": "{{ output.value }}",
+                {%- endfor %}
+        ])
+        {% endif -%}
+        .concurrency(3)
+        .stages([
+                {%- for stage in entity.stages %}
+                Stage.builder()
+                        .name("{{ stage.name }}")
+                        .tasks([
+                                {%- for task in stage.tasks %}
+                                {%- if task is codestreamTaskType("jenkins") -%}
+                                {{ jenkinsTask(task) -}}
+                                {% endif -%}
+                                {%- if task is codestreamTaskType("poll") -%}
+                                {{ pollTask(task) -}}
+                                {% endif -%}
+                                {%- if task is codestreamTaskType("rest") -%}
+                                {{ restTask(task) -}}
+                                {% endif -%}
+                                {%- if task is codestreamTaskType("user_operation") -%}
+                                {{ userOperationTask(task) -}}
+                                {% endif -%}
+                                {%- if task is codestreamTaskType("condition") -%}
+                                {{ conditionTask(task) -}}
+                                {% endif -%}
+                                {%- if task is codestreamTaskType("pipeline") -%}
+                                {{ pipelineTask(task) -}}
+                                {% endif -%}
+                                {%- if task is codestreamTaskType("ssh") -%}
+                                {{ sshTask(task) -}}
+                                {% endif -%}
+                                {%- if task is codestreamTaskType("parallel") %}
+                                new ParallelTask([
+                                {%- for innerTask in task.tasks %}
+                                        {%- if innerTask is codestreamTaskType("jenkins") -%}
+                                        {{ jenkinsTask(innerTask) -}}
+                                        {% endif -%}
+                                        {%- if innerTask is codestreamTaskType("poll") -%}
+                                        {{ pollTask(innerTask) -}}
+                                        {% endif -%}
+                                        {%- if innerTask is codestreamTaskType("rest") -%}
+                                        {{ restTask(innerTask) -}}
+                                        {% endif -%}
+                                        {%- if innerTask is codestreamTaskType("user_operation") -%}
+                                        {{ userOperationTask(innerTask) -}}
+                                        {% endif -%}
+                                        {%- if innerTask is codestreamTaskType("condition") -%}
+                                        {{ conditionTask(innerTask) -}}
+                                        {% endif -%}
+                                        {%- if innerTask is codestreamTaskType("pipeline") -%}
+                                        {{ pipelineTask(innerTask) -}}
+                                        {% endif -%}
+                                        {%- if innerTask is codestreamTaskType("ssh") -%}
+                                        {{ sshTask(innerTask) -}}
+                                        {% endif -%}
+                                {%- endfor %}
+                                ]),
+                                {%- endif -%}
+                                {%- endfor %}
+                        ])
+                        .build(),
+                {%- endfor %}
+        ])
+        .notifications([
+                {%- for notification in entity.notifications | codestreamNotificationFilter("jira") %}
+                JiraNotification.builder()
+                        .summary("{{ notification.summary }}")
+                        .action("{{ notification.action }}")
+                        .assignee("{{ notification.assignee }}")
+                        .description("{{ notification.description }}")
+                        .event(Event.{{ notification.event.name }})
+                        .issuetype("{{ notification.issuetype }}")
+                        .project("{{ notification.project }}")
+                        .build(),
+                {%- endfor %}
+                {%- for notification in entity.notifications | codestreamNotificationFilter("email") %}
+                EmailNotification.builder()
+                        .subject("{{ notification.subject }}")
+                        .body("{{ notification.body }}")
+                        .emailTo([
+                                {%- for mail in notification.emailTo %}
+                                "{{ mail }}",
+                                {%- endfor %}
+                        ])
+                        .event(Event.{{ notification.event }})
+                        .endpoint("{{ notification.endpoint }}")
+                        .build(),
+                {%- endfor %}
+                {%- for notification in entity.notifications | codestreamNotificationFilter("webhook") %}
+                WebhookNotification.builder()
+                        .url("{{ notification.url }}")
+                        .action(com.vmware.devops.client.codestream.stubs.Notification.WebhookNotificaton.WebhookAction.{{ notification.action.name }})
+                        .payload("{{ notification.payload }}")
+                        .cloudProxyId("{{ notification.cloudProxyId }}")
+                        {% if notification.headers is not empty -%}
+                        .headers([
+                                {%- for header in notification.headers | sortMap %}
+                                "{{ header.key }}": "{{ header.value }}",
+                                {%- endfor %}
+                        ])
+                        {% endif -%}
+                        .event(Event.{{ notification.event }})
+                        .build(),
+                {%- endfor %}
+        ])
+        .build()

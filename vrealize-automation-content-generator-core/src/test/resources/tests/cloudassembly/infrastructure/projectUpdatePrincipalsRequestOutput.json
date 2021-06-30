@@ -1,0 +1,14 @@
+{
+  "modify" : [ {
+    "email" : "test@vmware.com",
+    "role" : "administrator",
+    "type" : "user"
+  }, {
+    "email" : "ALL USERS@",
+    "role" : "viewer",
+    "type" : "group"
+  } ],
+  "remove" : [ {
+    "email" : "removeMe"
+  } ]
+}

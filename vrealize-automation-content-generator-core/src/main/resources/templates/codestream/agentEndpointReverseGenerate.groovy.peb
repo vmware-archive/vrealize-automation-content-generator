@@ -1,0 +1,9 @@
+import com.vmware.devops.model.codestream.AgentEndpoint
+
+return AgentEndpoint.builder()
+        .name("{{ entity.name }}")
+        .project("{{ entity.project }}")
+        {% if entity.cloudProxy is not empty -%}
+        .cloudProxy("{{ entity.cloudProxy }}")
+        {% endif -%}
+        .build()

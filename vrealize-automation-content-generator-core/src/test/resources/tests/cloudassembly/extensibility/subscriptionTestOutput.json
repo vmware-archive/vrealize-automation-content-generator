@@ -1,0 +1,12 @@
+{
+  "blocking" : false,
+  "criteria" : "",
+  "disabled" : false,
+  "eventTopicId" : "compute.provision.post",
+  "name" : "test",
+  "priority" : 7,
+  "runnableId" : "fakeId",
+  "runnableType" : "extensibility.abx",
+  "timeout" : 13,
+  "type" : "RUNNABLE"
+}

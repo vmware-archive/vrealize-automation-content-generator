@@ -1,0 +1,52 @@
+{
+  "concurrency" : 20,
+  "enabled" : true,
+  "input" : { },
+  "kind" : "PIPELINE",
+  "name" : "test",
+  "notifications" : {
+    "email" : [ {
+      "body" : "Test Body",
+      "endpoint" : "my-email-endpoint",
+      "event" : "SUCCESS",
+      "subject" : "Test Subject",
+      "to" : [ "test@vmware.com", "test1@vmware.com" ]
+    } ],
+    "jira" : [ {
+      "action" : "create",
+      "assignee" : "user@vmware.com",
+      "description" : "testDescription",
+      "endpoint" : "my-jira-endpoint",
+      "event" : "FAILURE",
+      "issuetype" : "bug",
+      "project" : "VDEVOPS",
+      "summary" : "testSummary"
+    } ],
+    "webhook" : [ {
+      "action" : "post",
+      "cloudProxyId" : "testCloudProxy",
+      "event" : "FAILURE",
+      "headers" : { },
+      "payload" : "testPayload",
+      "url" : "https://test.com"
+    } ]
+  },
+  "output" : { },
+  "project" : "testProjectName",
+  "stageOrder" : [ "stage-1" ],
+  "stages" : {
+    "stage-1" : {
+      "taskOrder" : [ "task-1" ],
+      "tasks" : {
+        "task-1" : {
+          "ignoreFailure" : false,
+          "input" : {
+            "inputProperties" : { },
+            "pipeline" : "test"
+          },
+          "type" : "Pipeline"
+        }
+      }
+    }
+  }
+}

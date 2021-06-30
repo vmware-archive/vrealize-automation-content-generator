@@ -1,0 +1,69 @@
+{
+  "concurrency" : 20,
+  "enabled" : true,
+  "input" : {
+    "globalPipelineInput" : "globalPipelineInputValue",
+    "i1" : "v1",
+    "pipelineInput" : "defaultValue",
+    "pipelineInput2" : "defaultValue2"
+  },
+  "kind" : "PIPELINE",
+  "name" : "test",
+  "notifications" : {
+    "email" : [ ],
+    "jira" : [ ],
+    "webhook" : [ ]
+  },
+  "output" : {
+    "globalKey" : "${stage-1.task-1.output.localKey}",
+    "o1" : "v1"
+  },
+  "project" : "testProjectName",
+  "stageOrder" : [ "stage-1" ],
+  "stages" : {
+    "stage-1" : {
+      "taskOrder" : [ "task-1", "job-2", "job-folder-3-job-3" ],
+      "tasks" : {
+        "job-2" : {
+          "endpoints" : {
+            "jenkinsServer" : "my-jenkins-endpoint"
+          },
+          "ignoreFailure" : false,
+          "input" : {
+            "job" : "job-2",
+            "parameters" : { }
+          },
+          "type" : "Jenkins"
+        },
+        "job-folder-3-job-3" : {
+          "endpoints" : {
+            "jenkinsServer" : "my-jenkins-endpoint"
+          },
+          "ignoreFailure" : false,
+          "input" : {
+            "job" : "job-3",
+            "jobFolder" : "/job/folder-3",
+            "parameters" : { }
+          },
+          "type" : "Jenkins"
+        },
+        "task-1" : {
+          "endpoints" : {
+            "jenkinsServer" : "my-jenkins-endpoint"
+          },
+          "ignoreFailure" : false,
+          "input" : {
+            "job" : "job-1",
+            "parameters" : {
+              "anotherPipelineInput" : "${input.globalPipelineInput}",
+              "localInput" : "defaultValue",
+              "pipelineInput" : "${input.pipelineInput}",
+              "pipelineInput2" : "${input.pipelineInput2}"
+            }
+          },
+          "type" : "Jenkins"
+        }
+      }
+    }
+  }
+}

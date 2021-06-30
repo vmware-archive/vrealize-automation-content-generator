@@ -1,0 +1,31 @@
+import com.vmware.devops.client.cloudassembly.extensibility.stubs.Subscription.EventTopic
+import com.vmware.devops.client.cloudassembly.extensibility.stubs.Subscription.RunnableType
+import com.vmware.devops.model.cloudassembly.extensibility.Criteria
+import com.vmware.devops.model.cloudassembly.extensibility.Subscription
+
+return Subscription.builder()
+        {% if entity.name is not empty -%}
+        .name("{{entity.name}}")
+        {% endif -%}
+        {% if entity.runnableName is not empty -%}
+        .runnableName("{{entity.runnableName}}")
+        {% endif -%}
+        {% if entity.runnableType is not empty -%}
+        .runnableType(RunnableType.{{entity.runnableType}})
+        {% endif -%}
+        {% if entity.recoverRunnableName is not empty -%}
+        .recoverRunnableName("{{entity.recoverRunnableName}}")
+        {% endif -%}
+        {% if entity.recoverRunnableType is not empty -%}
+        .recoverRunnableType(RunnableType.{{entity.recoverRunnableType}})
+        {% endif -%}
+        {% if entity.eventTopic is not empty -%}
+        .eventTopic(EventTopic.{{entity.eventTopic}})
+        {% endif -%}
+        {% if entity.blocking is not empty -%}
+        .blocking({{entity.blocking}})
+        {% endif -%}
+        {% if entity.criteria is not empty -%}
+        .criteria(new Criteria("{{entity.criteria.toString() | criteria }}"))
+        {% endif -%}
+        .build()

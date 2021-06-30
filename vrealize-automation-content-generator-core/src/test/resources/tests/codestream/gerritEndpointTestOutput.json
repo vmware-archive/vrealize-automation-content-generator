@@ -1,0 +1,15 @@
+{
+  "cloudProxyId" : "fakeId",
+  "name" : "test",
+  "project" : "testProjectName",
+  "properties" : {
+    "fingerprint" : "fakeFingerprint",
+    "leMansAgent" : "fakeId",
+    "passPhrase" : "${var.test-endpoint-pass-phrase}",
+    "password" : "${var.test-endpoint-password}",
+    "privateKey" : "key",
+    "url" : "https://dummy.eng.vmware.com",
+    "username" : "hello"
+  },
+  "type" : "gerrit"
+}

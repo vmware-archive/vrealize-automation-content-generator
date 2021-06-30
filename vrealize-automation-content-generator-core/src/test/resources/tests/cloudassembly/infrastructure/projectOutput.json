@@ -1,0 +1,6 @@
+{
+  "name" : "test",
+  "properties" : {
+    "__projectPlacementPolicy" : "SPREAD"
+  }
+}

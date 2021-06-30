@@ -1,0 +1,45 @@
+import com.vmware.devops.client.cloudassembly.infrastructure.stubs.ProjectPrincipal
+import com.vmware.devops.client.cloudassembly.infrastructure.stubs.Project.PlacementPolicy
+import com.vmware.devops.model.cloudassembly.infrastructure.Project
+
+return Project.builder()
+        .name("{{entity.name}}")
+        {% if entity.users is not empty -%}
+        .users([
+                {%- for user in entity.users %}
+                Project.UserGroup.builder()
+                        {% if user.email is not empty -%}
+                        .email("{{user.email}}")
+                        {% endif -%}
+                        {% if user.role is not empty -%}
+                        .role(ProjectPrincipal.Role.{{user.role}})
+                        {% endif -%}
+                        .build(),
+                {%- endfor %}
+        ])
+        {% endif -%}
+        {% if entity.groups is not empty -%}
+        .groups([
+                {%- for user in entity.groups %}
+                Project.UserGroup.builder()
+                        {% if user.email is not empty -%}
+                        .email("{{user.email}}")
+                        {% endif -%}
+                        {% if user.role is not empty -%}
+                        .role(ProjectPrincipal.Role.{{user.role}})
+                        {% endif -%}
+                        .build(),
+                {%- endfor %}
+        ])
+        {% endif -%}
+        {% if entity.cloudZones is not empty -%}
+        .cloudZones([
+                {%- for cloudZone in entity.cloudZones %}
+                "{{cloudZone}}",
+                {%- endfor %}
+        ])
+        {% endif -%}
+        {% if entity.placementPolicy is not empty -%}
+        .placementPolicy(PlacementPolicy.{{entity.placementPolicy}})
+        {% endif -%}
+        .build()

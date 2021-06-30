@@ -1,0 +1,8 @@
+import com.vmware.devops.model.cloudassembly.design.CloudTemplate
+
+return CloudTemplate.builder()
+        .name("{{ entity.name }}")
+        .project("{{ entity.project }}")
+        .global({{ entity.global }})
+        .contentPath("{{ entity.contentPath }}")
+        .build()

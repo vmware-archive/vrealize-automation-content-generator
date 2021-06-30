@@ -1,0 +1,9 @@
+{
+  "actionType" : "FLOW",
+  "dependencies" : "",
+  "name" : "test-flow",
+  "projectId" : "fakeId",
+  "shared" : false,
+  "source" : "---\nversion: 1\nflow:\n  first:\n    action: \"predefined\"\n    next: \"second\"\n  flow_start:\n    next: \"first\"\n  second:\n    switch:\n      ${x == \"y\"}: \"third\"\n  third:\n    action: \"test-flow-third\"\n    next: \"flow_end\"\n",
+  "timeoutSeconds" : 600
+}

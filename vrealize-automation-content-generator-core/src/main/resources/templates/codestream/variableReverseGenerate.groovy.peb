@@ -1,0 +1,10 @@
+import com.vmware.devops.model.codestream.Variable
+
+return Variable.builder()
+        .name("{{entity.name}}")
+        {% if entity.description is not empty -%}
+        .description("{{entity.description}}")
+        {% endif -%}
+        .type(com.vmware.devops.client.codestream.stubs.Variable.VariableType.{{entity.type}})
+        .value("{{entity.value}}")
+        .build()

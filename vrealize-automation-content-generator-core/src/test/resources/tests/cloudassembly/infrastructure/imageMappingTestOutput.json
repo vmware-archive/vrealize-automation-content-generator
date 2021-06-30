@@ -1,0 +1,8 @@
+{
+  "imageMapping" : {
+    "fakeLink" : {
+      "image" : "imageName"
+    }
+  },
+  "name" : "test"
+}

@@ -1,0 +1,36 @@
+{
+  "concurrency" : 20,
+  "enabled" : true,
+  "input" : { },
+  "kind" : "PIPELINE",
+  "name" : "test",
+  "notifications" : {
+    "email" : [ ],
+    "jira" : [ ],
+    "webhook" : [ ]
+  },
+  "output" : { },
+  "project" : "testProjectName",
+  "stageOrder" : [ "stage-1" ],
+  "stages" : {
+    "stage-1" : {
+      "taskOrder" : [ "my-approval" ],
+      "tasks" : {
+        "my-approval" : {
+          "endpoints" : {
+            "emailServer" : "my-email-endpoint"
+          },
+          "ignoreFailure" : false,
+          "input" : {
+            "approvers" : [ "koko", "koko-1" ],
+            "description" : "my-description",
+            "expirationInDays" : 3,
+            "sendemail" : true,
+            "summary" : "my-summary"
+          },
+          "type" : "UserOperation"
+        }
+      }
+    }
+  }
+}

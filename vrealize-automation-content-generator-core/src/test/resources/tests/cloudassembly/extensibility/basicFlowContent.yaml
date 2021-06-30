@@ -1,0 +1,14 @@
+---
+version: 1
+flow:
+  first:
+    action: "predefined"
+    next: "second"
+  flow_start:
+    next: "first"
+  second:
+    switch:
+      ${x == "y"}: "third"
+  third:
+    action: "test-flow-third"
+    next: "flow_end"

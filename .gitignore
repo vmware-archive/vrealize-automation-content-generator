@@ -1,0 +1,9 @@
+.idea
+.history
+*.iml
+target
+groovyTarget
+.project
+.classpath
+.settings
+test-filled.properties

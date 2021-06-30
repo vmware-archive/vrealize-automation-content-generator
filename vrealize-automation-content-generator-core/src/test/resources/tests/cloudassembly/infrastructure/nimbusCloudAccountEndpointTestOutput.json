@@ -1,0 +1,10 @@
+{
+  "customProperties" : {
+    "isExternal" : "false"
+  },
+  "endpointProperties" : {
+    "dcId" : "onprem"
+  },
+  "endpointType" : "nimbus",
+  "name" : "nimbus"
+}

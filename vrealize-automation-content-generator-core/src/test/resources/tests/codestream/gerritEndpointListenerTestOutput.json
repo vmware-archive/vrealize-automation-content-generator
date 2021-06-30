@@ -1,0 +1,8 @@
+{
+  "apiToken" : "${var.test-endpoint-listen-token}",
+  "connected" : true,
+  "endpoint" : "test",
+  "kind" : "GERRIT_LISTENER",
+  "name" : "test",
+  "project" : "testProjectName"
+}

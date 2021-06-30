@@ -1,0 +1,12 @@
+import com.vmware.devops.model.codestream.GerritEndpoint
+
+return GerritEndpoint.builder()
+        .name("{{ entity.name }}")
+        .project("{{ entity.project }}")
+        .url("{{ entity.url }}")
+        .username("{{ entity.username }}")
+        .password("{{ entity.password }}")
+        .privateKey("""{{ entity.privateKey }}""")
+        .passPhrase("{{ entity.passPhrase }}")
+        .cloudProxy("{{ entity.cloudProxy }}")
+        .build()

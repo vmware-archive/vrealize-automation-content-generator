@@ -1,0 +1,15 @@
+{
+  "cloudProxyId" : "fakeId",
+  "name" : "test",
+  "project" : "testProjectName",
+  "properties" : {
+    "fingerprint" : "fakeFingerprint",
+    "password" : "${var.test-endpoint-password}",
+    "pollInterval" : 15,
+    "retryCount" : 5,
+    "retryWaitSeconds" : 60,
+    "url" : "https://dummy.eng.vmware.com",
+    "username" : "hello"
+  },
+  "type" : "jenkins"
+}

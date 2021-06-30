@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>${artifactId}</artifactId>
+    <groupId>${groupId}</groupId>
+    <version>${version}</version>
+
+    <properties>
+        <target.instance>${instance}</target.instance>
+        <target.loginInstance>${loginInstance}</target.loginInstance>
+        <target.username>${username}</target.username>
+        <target.password>${password}</target.password>
+        <target.refreshToken>${refreshToken}</target.refreshToken>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.vmware.devops</groupId>
+            <artifactId>vrealize-automation-content-generator-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>reverseGenerate</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>compile</id>
+                                <phase>compile</phase>
+                                <configuration>
+                                    <tasks>
+                                        <taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc">
+                                            <classpath refid="maven.compile.classpath"/>
+                                        </taskdef>
+                                        <mkdir dir="${basedir}/target/groovyTarget"/>
+                                        <groovyc destdir="${basedir}/target/groovyTarget" srcdir="${basedir}/src/main/resources" listfiles="true">
+                                            <classpath refid="maven.compile.classpath"/>
+                                        </groovyc>
+                                    </tasks>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <configuration>
+                            <mainClass>com.vmware.devops.cli.ReverseGenerate</mainClass>
+                            <arguments>
+                                <argument>-i</argument>
+                                <argument>${target.instance}</argument>
+                                <argument>-l</argument>
+                                <argument>${target.loginInstance}</argument>
+<!-- If you're using username/password, uncommend this section -->
+<!--                                <argument>-u</argument>-->
+<!--                                <argument>${target.username}</argument>-->
+<!--                                <argument>-p</argument>-->
+<!--                                <argument>${target.password}</argument>-->
+<!-- And remove this -->
+                                <argument>-t</argument>
+                                <argument>${target.refreshToken}</argument>
+<!--END-->
+                            </arguments>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>reverse-generate-content</id>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <phase>deploy</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>generate</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>compile</id>
+                                <phase>compile</phase>
+                                <configuration>
+                                    <tasks>
+                                        <taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc">
+                                            <classpath refid="maven.compile.classpath"/>
+                                        </taskdef>
+                                        <mkdir dir="${basedir}/groovyTarget"/>
+                                        <groovyc destdir="${basedir}/groovyTarget" srcdir="${basedir}/src/main/resources" listfiles="true">
+                                            <classpath refid="maven.compile.classpath"/>
+                                        </groovyc>
+                                    </tasks>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <configuration>
+                            <mainClass>com.vmware.devops.cli.Generate</mainClass>
+                            <arguments>
+                                <argument>-i</argument>
+                                <argument>${target.instance}</argument>
+                                <argument>-l</argument>
+                                <argument>${target.loginInstance}</argument>
+<!-- If you're using username/password, uncommend this section -->
+<!--                                <argument>-u</argument>-->
+<!--                                <argument>${target.username}</argument>-->
+<!--                                <argument>-p</argument>-->
+<!--                                <argument>${target.password}</argument>-->
+<!-- And remove this -->
+                                <argument>-t</argument>
+                                <argument>${target.refreshToken}</argument>
+<!--END-->
+                            </arguments>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>generate-content</id>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <phase>deploy</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

@@ -1,0 +1,9 @@
+import com.vmware.devops.model.cloudassembly.infrastructure.NimbusCloudAccount
+
+return NimbusCloudAccount.builder()
+        .enabledRegions([
+                {%- for region in entity.enabledRegions%}
+                NimbusCloudAccount.NimbusRegion.{{region.name}},
+                {%- endfor %}
+        ])
+        .build()

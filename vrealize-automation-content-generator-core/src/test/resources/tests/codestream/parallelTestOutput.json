@@ -1,0 +1,80 @@
+{
+  "concurrency" : 20,
+  "enabled" : true,
+  "input" : {
+    "pipelineInput" : "defaultValue"
+  },
+  "kind" : "PIPELINE",
+  "name" : "test",
+  "notifications" : {
+    "email" : [ ],
+    "jira" : [ ],
+    "webhook" : [ ]
+  },
+  "output" : {
+    "globalKey" : "${stage-1.task-1.output.localKey}"
+  },
+  "project" : "testProjectName",
+  "stageOrder" : [ "stage-1" ],
+  "stages" : {
+    "stage-1" : {
+      "taskOrder" : [ "task-1", "task-2,task-3", "task-4" ],
+      "tasks" : {
+        "task-1" : {
+          "ignoreFailure" : false,
+          "input" : {
+            "inputProperties" : {
+              "localInput" : "defaultValue",
+              "pipelineInput" : "${input.pipelineInput}"
+            },
+            "pipeline" : "task-1"
+          },
+          "type" : "Pipeline"
+        },
+        "task-2" : {
+          "ignoreFailure" : false,
+          "input" : {
+            "inputProperties" : {
+              "localInput" : "defaultValue",
+              "pipelineInput" : "${input.pipelineInput}"
+            },
+            "pipeline" : "task-2"
+          },
+          "type" : "Pipeline"
+        },
+        "task-3" : {
+          "endpoints" : {
+            "agent" : "agent"
+          },
+          "ignoreFailure" : false,
+          "input" : {
+            "action" : "get",
+            "headers" : {
+              "Accept" : "application/json",
+              "Content-Type" : "application/json"
+            },
+            "payload" : "hello",
+            "url" : "https://vmware.com"
+          },
+          "type" : "REST"
+        },
+        "task-4" : {
+          "endpoints" : {
+            "agent" : "agent"
+          },
+          "ignoreFailure" : false,
+          "input" : {
+            "action" : "get",
+            "headers" : {
+              "Accept" : "application/json",
+              "Content-Type" : "application/json"
+            },
+            "payload" : "hello",
+            "url" : "https://vmware.com"
+          },
+          "type" : "REST"
+        }
+      }
+    }
+  }
+}

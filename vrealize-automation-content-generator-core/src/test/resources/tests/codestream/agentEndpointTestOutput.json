@@ -1,0 +1,9 @@
+{
+  "cloudProxyId" : "fakeId",
+  "name" : "test",
+  "project" : "testProjectName",
+  "properties" : {
+    "leMansAgent" : "fakeId"
+  },
+  "type" : "agent"
+}

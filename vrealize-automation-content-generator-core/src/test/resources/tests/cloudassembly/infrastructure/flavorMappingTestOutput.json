@@ -1,0 +1,12 @@
+{
+  "instanceTypeMapping" : {
+    "fakeLink" : {
+      "instanceType" : "Default"
+    },
+    "fakeLink2" : {
+      "cpuCount" : 1,
+      "memoryMb" : 1000
+    }
+  },
+  "name" : "test"
+}

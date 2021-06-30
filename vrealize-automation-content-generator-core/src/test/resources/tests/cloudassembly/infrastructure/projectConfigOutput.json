@@ -1,0 +1,6 @@
+{
+  "cloudZones" : [ {
+    "name" : "nimbus / sc",
+    "placementZoneLink" : "fakeLink"
+  } ]
+}
