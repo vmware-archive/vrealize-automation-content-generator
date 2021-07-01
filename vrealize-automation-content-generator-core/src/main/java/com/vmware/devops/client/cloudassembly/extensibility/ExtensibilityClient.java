@@ -21,7 +21,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import org.apache.commons.io.FileUtils;
 
 import com.vmware.devops.SerializationUtils;
@@ -173,7 +172,8 @@ public class ExtensibilityClient {
         return null;
     }
 
-    public List<Action> getAllActions() throws URISyntaxException, IOException, InterruptedException {
+    public List<Action> getAllActions()
+            throws URISyntaxException, IOException, InterruptedException {
         // TODO current implementation gets the the maximum allowed documents for one request - 2000
         // If there are more than 2000 documents, proper pagination must be implemented
         String queryParams = "?size=2000";

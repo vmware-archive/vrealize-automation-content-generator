@@ -14,7 +14,7 @@
             <property name="processJavadoc" value="true"/>
         </module>
         <module name="ImportOrder">
-            <property name="groups" value="/^javax?\./,/^(?!com\.vmware\.)[a-z]/"/>
+            <property name="groups" value="/^java\./,/^javax\./,/^(?!com\.vmware\.)[a-z]/"/>
             <property name="ordered" value="true"/>
             <property name="separated" value="true"/>
             <property name="option" value="top"/>
@@ -66,9 +66,6 @@
             <property name="lineWrappingIndentation" value="8"/>
             <property name="arrayInitIndent" value="4"/>
         </module>
-
-        <!-- Additional to xenon. Needed for SuppressionCommentFilter -->
-        <module name="FileContentsHolder"/>
     </module>
 
     <module name="RegexpSingleline">
@@ -83,9 +80,6 @@
         <property name="format" value="\s+$"/>
         <property name="message" value="Trailing whitespace"/>
     </module>
-
-    <!-- Additional to xenon -->
-    <module name="SuppressionCommentFilter"/>
 
     <module name="RegexpHeader">
         <property name="header" value="\/\*\n \* Copyright (\d\d\d\d)(-\d\d\d\d)? VMware, Inc\.\n \* SPDX-License-Identifier: BSD-2-Clause"/>

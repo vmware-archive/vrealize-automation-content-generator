@@ -110,7 +110,7 @@ public class Utils {
     }
 
     public static void writeFile(File output, byte[] data) throws IOException {
-        try ( FileOutputStream fos = new FileOutputStream(output)) {
+        try (FileOutputStream fos = new FileOutputStream(output)) {
             fos.write(data);
         }
     }
