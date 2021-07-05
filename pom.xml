@@ -6,7 +6,7 @@
 
     <groupId>com.vmware.devops</groupId>
     <artifactId>vrealize-automation-content-generator-parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>pom</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -20,6 +20,27 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/vmware-samples/vrealize-automation-content-generator.git</connection>
+        <developerConnection>scm:git:ssh://github.com/vmware-samples/vrealize-automation-content-generator.git</developerConnection>
+        <url>https://github.com/vmware-samples/vrealize-automation-content-generator</url>
+    </scm>
+
+     <developers>
+        <developer>
+            <name>Grigor Lechev</name>
+            <email>glechev@vmware.com</email>
+            <organization>VMware</organization>
+            <organizationUrl>https://www.vmware.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Kostadin Samardzhiev</name>
+            <email>ksamardzhiev@vmware.com</email>
+            <organization>VMware</organization>
+            <organizationUrl>https://www.vmware.com</organizationUrl>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -229,4 +250,10 @@
             </plugins>
         </pluginManagement>
     </build>
+    <distributionManagement>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 </project>
