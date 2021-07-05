@@ -73,8 +73,6 @@ The format is:
 * Extensible - custom generation entities can be defined
 * Supported by modern IDE - Groovy is a standard language that is supported by all modern IDE so you get all the benefits from that fact
 
-## Try it out
-
 ### Prerequisites
 
 * JDK 11+
@@ -84,15 +82,6 @@ The format is:
 ### Build
 
 `mvn clean install -DskipITs`
-
-Optionally, you can build a container with the core deliverables after the above:
-
-```
-cd vrealize-automation-content-generator-core/
-docker build --tag vrealize-automation-content-generator .
-``` 
-
-We'll be working on uploading ready-to-use deliverables soon.
 
 ## Documentation
 Examples and detailed documentation in the [wiki](https://github.com/vmware-samples/vrealize-automation-content-generator/wiki)
