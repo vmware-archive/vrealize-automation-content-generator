@@ -60,26 +60,29 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>com.vmware.devops.cli.Generate</mainClass>
-                    <arguments>
-                        <argument>-i</argument>
-                        <argument>${instance}</argument>
-                        <argument>-l</argument>
-                        <argument>${loginInstance}</argument>
-                        <argument>-u</argument>
-                        <argument>${username}</argument>
-                        <argument>-p</argument>
-                        <argument>${password}</argument>
-                        <argument>-t</argument>
-                        <argument>${refershToken}</argument>
-                    </arguments>
-                </configuration>
                 <executions>
                     <execution>
                         <id>generate-codestream-content</id>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-classpath</argument>
+                                <classpath/>
+                                <argument>com.vmware.devops.cli.Generate</argument>
+                                <argument>-i</argument>
+                                <argument>${instance}</argument>
+                                <argument>-l</argument>
+                                <argument>${loginInstance}</argument>
+                                <argument>-u</argument>
+                                <argument>${username}</argument>
+                                <argument>-p</argument>
+                                <argument>${password}</argument>
+                                <argument>-t</argument>
+                                <argument>${refershToken}</argument>
+                            </arguments>
+                        </configuration>
                         <goals>
-                            <goal>java</goal>
+                            <goal>exec</goal>
                         </goals>
                         <phase>deploy</phase>
                     </execution>

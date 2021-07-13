@@ -53,29 +53,32 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <configuration>
-                            <mainClass>com.vmware.devops.cli.ReverseGenerate</mainClass>
-                            <arguments>
-                                <argument>-i</argument>
-                                <argument>${target.instance}</argument>
-                                <argument>-l</argument>
-                                <argument>${target.loginInstance}</argument>
-<!-- If you're using username/password, uncommend this section -->
-<!--                                <argument>-u</argument>-->
-<!--                                <argument>${target.username}</argument>-->
-<!--                                <argument>-p</argument>-->
-<!--                                <argument>${target.password}</argument>-->
-<!-- And remove this -->
-                                <argument>-t</argument>
-                                <argument>${target.refreshToken}</argument>
-<!--END-->
-                            </arguments>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>reverse-generate-content</id>
+                                <configuration>
+                                    <executable>java</executable>
+                                    <arguments>
+                                        <argument>-classpath</argument>
+                                        <classpath/>
+                                        <argument>com.vmware.devops.cli.ReverseGenerate</argument>
+                                        <argument>-i</argument>
+                                        <argument>${target.instance}</argument>
+                                        <argument>-l</argument>
+                                        <argument>${target.loginInstance}</argument>
+                                        <!-- If you're using username/password, uncommend this section -->
+                                        <!--                                <argument>-u</argument>-->
+                                        <!--                                <argument>${target.username}</argument>-->
+                                        <!--                                <argument>-p</argument>-->
+                                        <!--                                <argument>${target.password}</argument>-->
+                                        <!-- And remove this -->
+                                        <argument>-t</argument>
+                                        <argument>${target.refreshToken}</argument>
+                                        <!--END-->
+                                    </arguments>
+                                </configuration>
                                 <goals>
-                                    <goal>java</goal>
+                                    <goal>exec</goal>
                                 </goals>
                                 <phase>deploy</phase>
                             </execution>
@@ -124,29 +127,32 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <configuration>
-                            <mainClass>com.vmware.devops.cli.Generate</mainClass>
-                            <arguments>
-                                <argument>-i</argument>
-                                <argument>${target.instance}</argument>
-                                <argument>-l</argument>
-                                <argument>${target.loginInstance}</argument>
-<!-- If you're using username/password, uncommend this section -->
-<!--                                <argument>-u</argument>-->
-<!--                                <argument>${target.username}</argument>-->
-<!--                                <argument>-p</argument>-->
-<!--                                <argument>${target.password}</argument>-->
-<!-- And remove this -->
-                                <argument>-t</argument>
-                                <argument>${target.refreshToken}</argument>
-<!--END-->
-                            </arguments>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>generate-content</id>
+                                <configuration>
+                                    <executable>java</executable>
+                                    <arguments>
+                                        <argument>-classpath</argument>
+                                        <classpath/>
+                                        <argument>com.vmware.devops.cli.Generate</argument>
+                                        <argument>-i</argument>
+                                        <argument>${target.instance}</argument>
+                                        <argument>-l</argument>
+                                        <argument>${target.loginInstance}</argument>
+                                        <!-- If you're using username/password, uncommend this section -->
+                                        <!--                                <argument>-u</argument>-->
+                                        <!--                                <argument>${target.username}</argument>-->
+                                        <!--                                <argument>-p</argument>-->
+                                        <!--                                <argument>${target.password}</argument>-->
+                                        <!-- And remove this -->
+                                        <argument>-t</argument>
+                                        <argument>${target.refreshToken}</argument>
+                                        <!--END-->
+                                    </arguments>
+                                </configuration>
                                 <goals>
-                                    <goal>java</goal>
+                                    <goal>exec</goal>
                                 </goals>
                                 <phase>deploy</phase>
                             </execution>
