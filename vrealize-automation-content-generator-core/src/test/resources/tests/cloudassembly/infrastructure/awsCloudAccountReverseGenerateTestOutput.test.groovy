@@ -1,11 +1,12 @@
 import com.vmware.devops.model.cloudassembly.infrastructure.AwsCloudAccount
+import com.vmware.devops.model.cloudassembly.infrastructure.AwsCloudAccount.AwsRegion
 
 return AwsCloudAccount.builder()
         .name("test")
         .accessKeyId("key")
         .secretAccessKey("SET_ME")
         .enabledRegions([
-                "eu-west-1",
-                "eu-west-2",
+                AwsRegion.EU_WEST_1,
+                AwsRegion.EU_WEST_2,
         ])
         .build()

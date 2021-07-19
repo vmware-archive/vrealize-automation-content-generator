@@ -59,12 +59,6 @@ public class NimbusCloudAccount extends CloudAccount
     }
 
     @Override
-    protected List<String> getRegions() {
-        return enabledRegions.stream().map(NimbusRegion::getRegionName)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public void populateData(Endpoint endpoint)
             throws InterruptedException, IOException, URISyntaxException {
         enabledRegions = ReverseGenerationContext.getInstance().getEndpointConfiguration()
@@ -102,7 +96,7 @@ public class NimbusCloudAccount extends CloudAccount
     }
 
     @AllArgsConstructor
-    public enum NimbusRegion {
+    public enum NimbusRegion implements Region {
         SC("sc", "Santa Clara"),
         WDC("wdc", "Washington DC"),
         SOF("sof", "Sofia");

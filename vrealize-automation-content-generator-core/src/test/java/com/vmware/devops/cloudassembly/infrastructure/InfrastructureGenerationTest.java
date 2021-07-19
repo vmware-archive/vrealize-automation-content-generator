@@ -24,6 +24,8 @@ import com.vmware.devops.Utils;
 import com.vmware.devops.client.cloudassembly.infrastructure.stubs.ProjectPrincipal;
 import com.vmware.devops.client.cloudassembly.infrastructure.stubs.RegionInfo;
 import com.vmware.devops.model.cloudassembly.infrastructure.AwsCloudAccount;
+import com.vmware.devops.model.cloudassembly.infrastructure.AzureCloudAccount;
+import com.vmware.devops.model.cloudassembly.infrastructure.AzureCloudAccount.AzureRegion;
 import com.vmware.devops.model.cloudassembly.infrastructure.FlavorMapping;
 import com.vmware.devops.model.cloudassembly.infrastructure.ImageMapping;
 import com.vmware.devops.model.cloudassembly.infrastructure.NimbusCloudAccount;
@@ -58,7 +60,7 @@ public class InfrastructureGenerationTest extends GenerationTestBase {
                         .name(NimbusRegion.WDC.getRegionName())
                         .regionId(NimbusRegion.WDC.getId())
                         .build()
-                )).when(mock).filterRegions(any());
+                )).when(mock).filterRegions(account.getEnabledRegions());
 
         String output = SerializationUtils
                 .prettifyJson(SerializationUtils.toPrettyJson(mock.getEndpoint()));
@@ -151,7 +153,7 @@ public class InfrastructureGenerationTest extends GenerationTestBase {
         doReturn(List.of(RegionInfo.builder()
                 .name("Datacenter")
                 .regionId("dummyId")
-                .build())).when(mock).filterRegions(account.getDatacenters());
+                .build())).when(mock).filterRegions(any());
 
         String output = SerializationUtils
                 .prettifyJson(SerializationUtils.toPrettyJson(mock.getEndpoint()));
@@ -193,6 +195,34 @@ public class InfrastructureGenerationTest extends GenerationTestBase {
         expectedOutput = Utils
                 .readFile(
                         "tests/cloudassembly/infrastructure/awsCloudAccountRegionsTestOutput.json");
+        Assert.assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    public void azureCloudAccountTest() throws IOException {
+        SpecProcessor specProcessor = new SpecProcessor();
+        AzureCloudAccount account = (AzureCloudAccount) specProcessor
+                .process(Utils.readFile(
+                        "tests/cloudassembly/infrastructure/azureCloudAccountTest.groovy"));
+
+        AzureCloudAccount mock = spy(account);
+        doReturn(List.of(RegionInfo.builder()
+                .name(AzureRegion.EAST_US.getRegionName())
+                .regionId(AzureRegion.EAST_US.getId())
+                .build())).when(mock).filterRegions(account.getEnabledRegions());
+
+        String output = SerializationUtils
+                .prettifyJson(SerializationUtils.toPrettyJson(mock.getEndpoint()));
+        String expectedOutput = Utils
+                .readFile(
+                        "tests/cloudassembly/infrastructure/azureCloudAccountEndpointTestOutput.json");
+        Assert.assertEquals(expectedOutput, output);
+
+        output = SerializationUtils
+                .prettifyJson(SerializationUtils.toPrettyJson(mock.getEndpointRegions()));
+        expectedOutput = Utils
+                .readFile(
+                        "tests/cloudassembly/infrastructure/azureCloudAccountRegionsTestOutput.json");
         Assert.assertEquals(expectedOutput, output);
     }
 }

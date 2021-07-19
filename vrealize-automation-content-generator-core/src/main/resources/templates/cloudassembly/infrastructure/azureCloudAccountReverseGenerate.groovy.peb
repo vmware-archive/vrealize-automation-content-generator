@@ -1,0 +1,15 @@
+import com.vmware.devops.model.cloudassembly.infrastructure.AzureCloudAccount
+import com.vmware.devops.model.cloudassembly.infrastructure.AzureCloudAccount.AzureRegion
+
+return AzureCloudAccount.builder()
+        .name("{{ entity.name }}")
+        .subscriptionId("{{ entity.subscriptionId }}")
+        .tenantId("{{ entity.tenantId }}")
+        .clientApplicationId("{{ entity.clientApplicationId }}")
+        .clientApplicationSecretKey("{{ entity.clientApplicationSecretKey }}")
+        .enabledRegions([
+                {%- for region in entity.enabledRegions%}
+                AzureRegion.{{region.name}},
+                {%- endfor %}
+        ])
+        .build()

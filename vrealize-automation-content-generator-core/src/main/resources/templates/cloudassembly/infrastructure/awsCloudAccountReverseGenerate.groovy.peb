@@ -1,4 +1,5 @@
 import com.vmware.devops.model.cloudassembly.infrastructure.AwsCloudAccount
+import com.vmware.devops.model.cloudassembly.infrastructure.AwsCloudAccount.AwsRegion
 
 return AwsCloudAccount.builder()
         .name("{{ entity.name }}")
@@ -6,7 +7,7 @@ return AwsCloudAccount.builder()
         .secretAccessKey("{{entity.secretAccessKey }}")
         .enabledRegions([
                 {%- for region in entity.enabledRegions%}
-                "{{region}}",
+                AwsRegion.{{region.name}},
                 {%- endfor %}
         ])
         .build()

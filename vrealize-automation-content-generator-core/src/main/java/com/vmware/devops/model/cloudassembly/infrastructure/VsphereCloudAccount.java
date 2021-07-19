@@ -28,7 +28,6 @@ import com.vmware.devops.Utils;
 import com.vmware.devops.client.cloudassembly.infrastructure.stubs.Endpoint;
 import com.vmware.devops.client.cloudassembly.infrastructure.stubs.Endpoint.EndpointType;
 import com.vmware.devops.client.cloudassembly.infrastructure.stubs.InstanceTypeInfo;
-import com.vmware.devops.client.cloudassembly.infrastructure.stubs.Region;
 import com.vmware.devops.model.ReverseGenerationEntity;
 
 @Data
@@ -120,8 +119,9 @@ public class VsphereCloudAccount extends CloudAccount
     }
 
     @Override
-    protected List<String> getRegions() {
-        return getDatacenters();
+    protected List<Datacenter> getEnabledRegions() {
+        return getDatacenters().stream().map(Datacenter::new)
+                .collect(Collectors.toList());
     }
 
     public String fetchCertificate() {
@@ -161,7 +161,7 @@ public class VsphereCloudAccount extends CloudAccount
         datacenters = ReverseGenerationContext.getInstance().getVraExportedData().getRegions()
                 .stream().filter(r -> r.getEndpoint().getDocumentSelfLink()
                         .equals(endpoint.getDocumentSelfLink()))
-                .map(Region::getRegionName)
+                .map(com.vmware.devops.client.cloudassembly.infrastructure.stubs.Region::getRegionName)
                 .collect(Collectors.toList());
         String cloudProxyId = (String) endpoint.getEndpointProperties()
                 .get(DC_ID_ENDPOINT_PROPERTY_KEY);
@@ -196,6 +196,18 @@ public class VsphereCloudAccount extends CloudAccount
 
         if (failed) {
             throw new RuntimeException("At least one vSphere cloud account export failed.");
+        }
+    }
+
+    // Just a helper class so this conforms to the abstractions
+    @AllArgsConstructor
+    private static class Datacenter implements Region {
+        @Getter
+        private String regionName;
+
+        @Override
+        public String getId() {
+            return regionName;
         }
     }
 }

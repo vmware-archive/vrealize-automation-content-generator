@@ -1,0 +1,8 @@
+{
+  "createDefaultZones" : true,
+  "enabledRegionIds" : [ "eastus" ],
+  "enabledRegions" : [ {
+    "name" : "East US",
+    "regionId" : "eastus"
+  } ]
+}

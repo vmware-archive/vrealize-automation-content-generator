@@ -36,6 +36,9 @@ import com.vmware.devops.client.cloudassembly.infrastructure.stubs.RegionInfo;
 import com.vmware.devops.config.EndpointConfiguration;
 import com.vmware.devops.model.VraExportedData;
 import com.vmware.devops.model.cloudassembly.infrastructure.AwsCloudAccount;
+import com.vmware.devops.model.cloudassembly.infrastructure.AzureCloudAccount;
+import com.vmware.devops.model.cloudassembly.infrastructure.AzureCloudAccount.AzureRegion;
+import com.vmware.devops.model.cloudassembly.infrastructure.CloudAccount;
 import com.vmware.devops.model.cloudassembly.infrastructure.FlavorMapping;
 import com.vmware.devops.model.cloudassembly.infrastructure.ImageMapping;
 import com.vmware.devops.model.cloudassembly.infrastructure.NimbusCloudAccount;
@@ -111,8 +114,7 @@ public class InfrastructureReverseGenerationTest {
                 .endpointType(EndpointType.VSPHERE)
                 .endpointProperties(Map.of(
                         VsphereCloudAccount.HOST_NAME_ENDPOINT_PROPERTY_KEY, "vc-hostname",
-                        VsphereCloudAccount.PRIVATE_KEY_ID_ENDPOINT_PROPERTY_KEY,
-                        "username",
+                        CloudAccount.PRIVATE_KEY_ID_ENDPOINT_PROPERTY_KEY, "username",
                         VsphereCloudAccount.DC_ID_ENDPOINT_PROPERTY_KEY, "dc-id"
                 ))
                 .build();
@@ -171,7 +173,7 @@ public class InfrastructureReverseGenerationTest {
                 .documentSelfLink("test-link")
                 .endpointType(EndpointType.AWS)
                 .endpointProperties(Map.of(
-                        VsphereCloudAccount.PRIVATE_KEY_ID_ENDPOINT_PROPERTY_KEY, "key"
+                        CloudAccount.PRIVATE_KEY_ID_ENDPOINT_PROPERTY_KEY, "key"
                 ))
                 .build();
 
@@ -211,6 +213,61 @@ public class InfrastructureReverseGenerationTest {
         String expectedOutput = Utils
                 .readFile(
                         "tests/cloudassembly/infrastructure/awsCloudAccountReverseGenerateTestOutput.test.groovy");
+        Assert.assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    public void azureCloudAccountTest() throws Exception {
+        File outputDir = TestUtils.createTempDir();
+
+        Endpoint endpoint = Endpoint.builder()
+                .name("test")
+                .documentSelfLink("test-link")
+                .endpointType(EndpointType.AZURE)
+                .endpointProperties(Map.of(
+                        CloudAccount.PRIVATE_KEY_ID_ENDPOINT_PROPERTY_KEY, "client-id",
+                        CloudAccount.PRIVATE_KEY_ENDPOINT_PROPERTY_KEY, "secret",
+                        AzureCloudAccount.SUBSCIPTION_ID_ENDPOINT_PROPERTY_KEY, "subscription-id",
+                        AzureCloudAccount.TENANT_ID_ENDPOINT_PROPERTY_KEY, "tenant-id"
+                ))
+                .build();
+
+        VraExportedData data = new VraExportedData();
+        data.setRegions(List.of(
+                Region.builder()
+                        .regionId(AzureRegion.EAST_US.getId())
+                        .regionName(AzureRegion.EAST_US.getRegionName())
+                        .endpoint(endpoint)
+                        .build(),
+                Region.builder()
+                        .regionId(AzureRegion.EUROPE.getId())
+                        .regionName(AzureRegion.EUROPE.getRegionName())
+                        .endpoint(endpoint)
+                        .build(),
+                Region.builder()
+                        .regionId(AzureRegion.WEST_CENTRAL_US.getId())
+                        .regionName(AzureRegion.WEST_CENTRAL_US.getRegionName())
+                        .endpoint(Endpoint.builder()
+                                .documentSelfLink("test-link-2")
+                                .build())
+                        .build()
+        ));
+        data.setEndpoints(List.of(
+                endpoint
+        ));
+
+        ReverseGenerationContext.getInstance().setVraExportedData(data);
+        ReverseGenerationContext.getInstance().setOutputDir(outputDir.getAbsolutePath());
+
+        new AzureCloudAccount().dumpAll();
+
+        String output = Utils
+                .readFile(
+                        new File(outputDir, "010-test-azure-cloud-account.groovy")
+                                .getAbsolutePath());
+        String expectedOutput = Utils
+                .readFile(
+                        "tests/cloudassembly/infrastructure/azureCloudAccountReverseGenerateTestOutput.test.groovy");
         Assert.assertEquals(expectedOutput, output);
     }
 

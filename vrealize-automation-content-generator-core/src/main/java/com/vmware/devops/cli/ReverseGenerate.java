@@ -25,6 +25,7 @@ import com.vmware.devops.model.cloudassembly.design.CloudTemplate;
 import com.vmware.devops.model.cloudassembly.extensibility.Action;
 import com.vmware.devops.model.cloudassembly.extensibility.Subscription;
 import com.vmware.devops.model.cloudassembly.infrastructure.AwsCloudAccount;
+import com.vmware.devops.model.cloudassembly.infrastructure.AzureCloudAccount;
 import com.vmware.devops.model.cloudassembly.infrastructure.FlavorMapping;
 import com.vmware.devops.model.cloudassembly.infrastructure.ImageMapping;
 import com.vmware.devops.model.cloudassembly.infrastructure.NimbusCloudAccount;
@@ -55,6 +56,7 @@ public class ReverseGenerate implements Callable<Integer> {
                     NimbusCloudAccount.class,
                     VsphereCloudAccount.class,
                     AwsCloudAccount.class,
+                    AzureCloudAccount.class,
                     // Codestream
                     Pipeline.class,
                     Variable.class,

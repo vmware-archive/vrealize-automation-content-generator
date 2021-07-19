@@ -6,9 +6,8 @@
 package com.vmware.devops.model.cloudassembly.infrastructure;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.vmware.devops.GenerationContext;
@@ -39,16 +38,18 @@ public abstract class CloudAccount
                 .updateEndpointRegions(regions);
     }
 
-    public List<RegionInfo> filterRegions(List<String> regionNames) {
+    public List<RegionInfo> filterRegions(List<? extends Region> regions) {
         try {
-            List<RegionInfo> regions = GenerationContext.getInstance().getEndpointConfiguration()
+            List<RegionInfo> regionInfos = GenerationContext.getInstance()
+                    .getEndpointConfiguration()
                     .getClient()
                     .getCloudAssembly().getInfrastructure().fetchRegionsForEndpoint(getEndpoint());
-            Set<String> notFould = new HashSet<>(regionNames);
+            Map<String, Region> notFould = regions.stream()
+                    .collect(Collectors.toMap(Region::getId, r -> r));
             List<RegionInfo> result = new ArrayList<>();
-            for (RegionInfo r : regions) {
-                String name = r.getName();
-                if (notFould.remove(name)) {
+            for (RegionInfo r : regionInfos) {
+                if (notFould.remove(r.getRegionId()) != null ||
+                        notFould.remove(r.getName()) != null) { // Try names as well because of VC
                     result.add(r);
                 }
             }
@@ -64,7 +65,7 @@ public abstract class CloudAccount
     }
 
     public EndpointRegions getEndpointRegions() {
-        List<RegionInfo> enabledRegions = filterRegions(getRegions());
+        List<RegionInfo> enabledRegions = filterRegions(getEnabledRegions());
 
         return EndpointRegions.builder()
                 .enabledRegionIds(enabledRegions.stream().map(RegionInfo::getRegionId).collect(
@@ -76,5 +77,11 @@ public abstract class CloudAccount
 
     public abstract Endpoint getEndpoint();
 
-    protected abstract List<String> getRegions();
+    protected abstract List<? extends Region> getEnabledRegions();
+
+    public interface Region {
+        String getRegionName();
+
+        String getId();
+    }
 }

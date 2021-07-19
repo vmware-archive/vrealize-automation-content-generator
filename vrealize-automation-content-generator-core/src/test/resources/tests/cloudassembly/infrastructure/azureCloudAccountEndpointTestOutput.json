@@ -1,0 +1,10 @@
+{
+  "endpointProperties" : {
+    "azureTenantId" : "tenant-id",
+    "privateKey" : "secret",
+    "privateKeyId" : "id",
+    "userLink" : "subscription-id"
+  },
+  "endpointType" : "azure",
+  "name" : "azure-test"
+}

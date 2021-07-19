@@ -13,13 +13,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.vmware.devops.ReverseGenerationContext;
 import com.vmware.devops.client.cloudassembly.infrastructure.stubs.Endpoint;
 import com.vmware.devops.client.cloudassembly.infrastructure.stubs.Endpoint.EndpointType;
-import com.vmware.devops.client.cloudassembly.infrastructure.stubs.Region;
 import com.vmware.devops.model.ReverseGenerationEntity;
 
 @Builder
@@ -49,7 +49,7 @@ public class AwsCloudAccount extends CloudAccount
     /**
      * Enabled regions
      */
-    private List<String> enabledRegions;
+    private List<AwsRegion> enabledRegions;
 
     @Override
     public Endpoint getEndpoint() {
@@ -64,11 +64,6 @@ public class AwsCloudAccount extends CloudAccount
     }
 
     @Override
-    protected List<String> getRegions() {
-        return enabledRegions;
-    }
-
-    @Override
     public void populateData(Endpoint endpoint) {
         name = endpoint.getName();
         accessKeyId = (String) endpoint.getEndpointProperties()
@@ -78,7 +73,7 @@ public class AwsCloudAccount extends CloudAccount
         enabledRegions = ReverseGenerationContext.getInstance().getVraExportedData().getRegions()
                 .stream().filter(r -> r.getEndpoint().getDocumentSelfLink()
                         .equals(endpoint.getDocumentSelfLink()))
-                .map(Region::getRegionName)
+                .map(r -> AwsRegion.fromId(r.getRegionId()))
                 .collect(Collectors.toList());
     }
 
@@ -106,6 +101,49 @@ public class AwsCloudAccount extends CloudAccount
 
         if (failed) {
             throw new RuntimeException("At least one AWS cloud account export failed.");
+        }
+    }
+
+    @AllArgsConstructor
+    public enum AwsRegion implements Region {
+        AF_SOUTH_1("af-south-1"),
+        AP_EAST_1("ap-east-1"),
+        AP_NORTHEAST_1("ap-northeast-1"),
+        AP_NORTHEAST_2("ap-northeast-2"),
+        AP_NORTHEAST_3("ap-northeast-3"),
+        AP_SOUTH_1("ap-south-1"),
+        AP_SOUTHEAST_1("ap-southeast-1"),
+        AP_SOUTHEAST_2("ap-southeast-2"),
+        CA_CENTRAL_1("ca-central-1"),
+        EU_CENTRAL_1("eu-central-1"),
+        EU_NORTH_1("eu-north-1"),
+        EU_SOUTH_1("eu-south-1"),
+        EU_WEST_1("eu-west-1"),
+        EU_WEST_2("eu-west-2"),
+        EU_WEST_3("eu-west-3"),
+        ME_SOUTH_1("me-south-1"),
+        SA_EAST_1("sa-east-1"),
+        US_EAST_1("us-east-1"),
+        US_EAST_2("us-east-2"),
+        US_WEST_1("us-west-1"),
+        US_WEST_2("us-west-2");
+
+        @Getter
+        private String id;
+
+        public static AwsRegion fromId(String id) {
+            for (AwsRegion r : AwsRegion.values()) {
+                if (r.getId().equals(id)) {
+                    return r;
+                }
+            }
+
+            throw new IllegalArgumentException("Unknown region with id " + id);
+        }
+
+        @Override
+        public String getRegionName() {
+            return id;
         }
     }
 }

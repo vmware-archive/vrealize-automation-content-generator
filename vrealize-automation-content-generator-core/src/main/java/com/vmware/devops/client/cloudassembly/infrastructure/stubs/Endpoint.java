@@ -28,7 +28,8 @@ public class Endpoint {
     public enum EndpointType {
         NIMBUS,
         VSPHERE,
-        AWS;
+        AWS,
+        AZURE;
 
         @JsonValue
         public String getValue() {
