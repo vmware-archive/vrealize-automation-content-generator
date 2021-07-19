@@ -27,7 +27,8 @@ public class Endpoint {
     @AllArgsConstructor
     public enum EndpointType {
         NIMBUS,
-        VSPHERE;
+        VSPHERE,
+        AWS;
 
         @JsonValue
         public String getValue() {

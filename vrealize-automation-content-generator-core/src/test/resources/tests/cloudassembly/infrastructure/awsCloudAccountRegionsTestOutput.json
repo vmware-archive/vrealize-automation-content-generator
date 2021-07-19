@@ -1,0 +1,8 @@
+{
+  "createDefaultZones" : true,
+  "enabledRegionIds" : [ "eu-west-3" ],
+  "enabledRegions" : [ {
+    "name" : "eu-west-3",
+    "regionId" : "eu-west-3"
+  } ]
+}

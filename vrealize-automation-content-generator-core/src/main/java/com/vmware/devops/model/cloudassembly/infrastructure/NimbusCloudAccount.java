@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,16 +23,16 @@ import lombok.extern.slf4j.Slf4j;
 import com.vmware.devops.ReverseGenerationContext;
 import com.vmware.devops.client.cloudassembly.infrastructure.stubs.Endpoint;
 import com.vmware.devops.client.cloudassembly.infrastructure.stubs.Endpoint.EndpointType;
-import com.vmware.devops.client.cloudassembly.infrastructure.stubs.EndpointRegions;
 import com.vmware.devops.client.cloudassembly.infrastructure.stubs.InstanceTypeInfo;
-import com.vmware.devops.client.cloudassembly.infrastructure.stubs.RegionInfo;
 import com.vmware.devops.model.ReverseGenerationEntity;
 
 @Builder
 @Data
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Slf4j
+
 /**
  * VMware internal. Not for public use.
  */
@@ -58,16 +59,9 @@ public class NimbusCloudAccount extends CloudAccount
     }
 
     @Override
-    public EndpointRegions getEndpointRegions() {
-        return EndpointRegions.builder()
-                .enabledRegionIds(enabledRegions.stream().map(NimbusRegion::getId)
-                        .collect(Collectors.toList()))
-                .enabledRegions(enabledRegions.stream().map(r -> RegionInfo.builder()
-                        .name(r.regionName)
-                        .regionId(r.getId())
-                        .build()).collect(Collectors.toList()))
-                .createDefaultZones(true)
-                .build();
+    protected List<String> getRegions() {
+        return enabledRegions.stream().map(NimbusRegion::getRegionName)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -93,7 +87,8 @@ public class NimbusCloudAccount extends CloudAccount
             try {
                 if (endpoint.getEndpointType().equals(EndpointType.NIMBUS)) {
                     dump(endpoint, ReverseGenerationContext.getInstance()
-                            .newOutputDirFile("010-" + endpoint.getName() + "-nimbus-cloud-account.groovy"));
+                            .newOutputDirFile(
+                                    "010-" + endpoint.getName() + "-nimbus-cloud-account.groovy"));
                 }
             } catch (Exception e) {
                 failed = true;

@@ -1,0 +1,8 @@
+{
+  "endpointProperties" : {
+    "privateKey" : "secret",
+    "privateKeyId" : "key"
+  },
+  "endpointType" : "aws",
+  "name" : "aws-test"
+}

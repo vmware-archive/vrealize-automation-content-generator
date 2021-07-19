@@ -5,19 +5,17 @@
 
 package com.vmware.devops.model.cloudassembly.infrastructure;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,13 +27,12 @@ import com.vmware.devops.ReverseGenerationContext;
 import com.vmware.devops.Utils;
 import com.vmware.devops.client.cloudassembly.infrastructure.stubs.Endpoint;
 import com.vmware.devops.client.cloudassembly.infrastructure.stubs.Endpoint.EndpointType;
-import com.vmware.devops.client.cloudassembly.infrastructure.stubs.EndpointRegions;
 import com.vmware.devops.client.cloudassembly.infrastructure.stubs.InstanceTypeInfo;
 import com.vmware.devops.client.cloudassembly.infrastructure.stubs.Region;
-import com.vmware.devops.client.cloudassembly.infrastructure.stubs.RegionInfo;
 import com.vmware.devops.model.ReverseGenerationEntity;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @Slf4j
 public class VsphereCloudAccount extends CloudAccount
@@ -45,11 +42,9 @@ public class VsphereCloudAccount extends CloudAccount
 
     public static final String HOST_NAME_ENDPOINT_PROPERTY_KEY = "hostName";
     public static final String DC_ID_ENDPOINT_PROPERTY_KEY = "dcId";
-    public static final String PRIVATE_KEY_ID_ENDPOINT_PROPERTY_KEY = "privateKeyId";
-    public static final String PRIVATE_KEY_ENDPOINT_PROPERTY_KEY = "privateKey";
 
     /**
-     * Cloud account name
+     * Cloud account names
      */
     private String name;
 
@@ -121,22 +116,12 @@ public class VsphereCloudAccount extends CloudAccount
                         "acceptSelfSignedCertificate", true,
                         "certificate", certificate
                 ))
-                .customProperties(Map.of(
-                        "isExternal", "false"
-                ))
                 .build();
     }
 
     @Override
-    public EndpointRegions getEndpointRegions() {
-        List<RegionInfo> enabledRegions = filterEnabledRegions();
-
-        return EndpointRegions.builder()
-                .enabledRegionIds(enabledRegions.stream().map(RegionInfo::getRegionId).collect(
-                        Collectors.toList()))
-                .enabledRegions(enabledRegions)
-                .createDefaultZones(true)
-                .build();
+    protected List<String> getRegions() {
+        return getDatacenters();
     }
 
     public String fetchCertificate() {
@@ -144,30 +129,6 @@ public class VsphereCloudAccount extends CloudAccount
             return Utils.getCertificateFromUrl("https://" + hostname);
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
-        }
-    }
-
-    public List<RegionInfo> filterEnabledRegions() {
-        try {
-            List<RegionInfo> regions = GenerationContext.getInstance().getEndpointConfiguration()
-                    .getClient()
-                    .getCloudAssembly().getInfrastructure().fetchRegionsForEndpoint(getEndpoint());
-            Set<String> notFould = new HashSet<>(datacenters);
-            List<RegionInfo> result = new ArrayList<>();
-            for (RegionInfo r : regions) {
-                String name = r.getName();
-                if (notFould.remove(name)) {
-                    result.add(r);
-                }
-            }
-
-            if (!notFould.isEmpty()) {
-                throw new IllegalStateException("Not all cloud zones found: " + notFould);
-            }
-
-            return result;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -229,12 +190,12 @@ public class VsphereCloudAccount extends CloudAccount
                 }
             } catch (Exception e) {
                 failed = true;
-                log.error("Failed to export Vsphere cloud account " + endpoint.getName(), e);
+                log.error("Failed to export vSphere cloud account " + endpoint.getName(), e);
             }
         }
 
         if (failed) {
-            throw new RuntimeException("At least one vspherecloud account export failed.");
+            throw new RuntimeException("At least one vSphere cloud account export failed.");
         }
     }
 }

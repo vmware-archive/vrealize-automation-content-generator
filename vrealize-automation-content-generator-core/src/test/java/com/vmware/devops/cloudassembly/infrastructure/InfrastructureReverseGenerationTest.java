@@ -35,6 +35,7 @@ import com.vmware.devops.client.cloudassembly.infrastructure.stubs.Region;
 import com.vmware.devops.client.cloudassembly.infrastructure.stubs.RegionInfo;
 import com.vmware.devops.config.EndpointConfiguration;
 import com.vmware.devops.model.VraExportedData;
+import com.vmware.devops.model.cloudassembly.infrastructure.AwsCloudAccount;
 import com.vmware.devops.model.cloudassembly.infrastructure.FlavorMapping;
 import com.vmware.devops.model.cloudassembly.infrastructure.ImageMapping;
 import com.vmware.devops.model.cloudassembly.infrastructure.NimbusCloudAccount;
@@ -92,7 +93,8 @@ public class InfrastructureReverseGenerationTest {
 
         String output = Utils
                 .readFile(
-                        new File(outputDir, "010-test-nimbus-cloud-account.groovy").getAbsolutePath());
+                        new File(outputDir, "010-test-nimbus-cloud-account.groovy")
+                                .getAbsolutePath());
         String expectedOutput = Utils
                 .readFile(
                         "tests/cloudassembly/infrastructure/nimbusCloudAccountReverseGenerateTestOutput.test.groovy");
@@ -152,10 +154,63 @@ public class InfrastructureReverseGenerationTest {
 
         String output = Utils
                 .readFile(
-                        new File(outputDir, "010-test-vsphere-cloud-account.groovy").getAbsolutePath());
+                        new File(outputDir, "010-test-vsphere-cloud-account.groovy")
+                                .getAbsolutePath());
         String expectedOutput = Utils
                 .readFile(
                         "tests/cloudassembly/infrastructure/vsphereCloudAccountReverseGenerateTestOutput.test.groovy");
+        Assert.assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    public void awsCloudAccountTest() throws Exception {
+        File outputDir = TestUtils.createTempDir();
+
+        Endpoint endpoint = Endpoint.builder()
+                .name("test")
+                .documentSelfLink("test-link")
+                .endpointType(EndpointType.AWS)
+                .endpointProperties(Map.of(
+                        VsphereCloudAccount.PRIVATE_KEY_ID_ENDPOINT_PROPERTY_KEY, "key"
+                ))
+                .build();
+
+        VraExportedData data = new VraExportedData();
+        data.setRegions(List.of(
+                Region.builder()
+                        .regionId("eu-west-1")
+                        .regionName("eu-west-1")
+                        .endpoint(endpoint)
+                        .build(),
+                Region.builder()
+                        .regionId("eu-west-2")
+                        .regionName("eu-west-2")
+                        .endpoint(endpoint)
+                        .build(),
+                Region.builder()
+                        .regionId("eu-west-3")
+                        .regionName("eu-west-3")
+                        .endpoint(Endpoint.builder()
+                                .documentSelfLink("test-link-2")
+                                .build())
+                        .build()
+        ));
+        data.setEndpoints(List.of(
+                endpoint
+        ));
+
+        ReverseGenerationContext.getInstance().setVraExportedData(data);
+        ReverseGenerationContext.getInstance().setOutputDir(outputDir.getAbsolutePath());
+
+        new AwsCloudAccount().dumpAll();
+
+        String output = Utils
+                .readFile(
+                        new File(outputDir, "010-test-aws-cloud-account.groovy")
+                                .getAbsolutePath());
+        String expectedOutput = Utils
+                .readFile(
+                        "tests/cloudassembly/infrastructure/awsCloudAccountReverseGenerateTestOutput.test.groovy");
         Assert.assertEquals(expectedOutput, output);
     }
 

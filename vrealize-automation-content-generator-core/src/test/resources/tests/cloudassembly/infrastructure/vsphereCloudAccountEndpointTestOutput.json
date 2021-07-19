@@ -1,7 +1,4 @@
 {
-  "customProperties" : {
-    "isExternal" : "false"
-  },
   "endpointProperties" : {
     "acceptSelfSignedCertificate" : true,
     "certificate" : "fakeCert",

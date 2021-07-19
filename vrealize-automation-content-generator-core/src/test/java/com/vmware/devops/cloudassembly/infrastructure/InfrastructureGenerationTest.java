@@ -5,6 +5,7 @@
 
 package com.vmware.devops.cloudassembly.infrastructure;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
@@ -22,9 +23,11 @@ import com.vmware.devops.SpecProcessor;
 import com.vmware.devops.Utils;
 import com.vmware.devops.client.cloudassembly.infrastructure.stubs.ProjectPrincipal;
 import com.vmware.devops.client.cloudassembly.infrastructure.stubs.RegionInfo;
+import com.vmware.devops.model.cloudassembly.infrastructure.AwsCloudAccount;
 import com.vmware.devops.model.cloudassembly.infrastructure.FlavorMapping;
 import com.vmware.devops.model.cloudassembly.infrastructure.ImageMapping;
 import com.vmware.devops.model.cloudassembly.infrastructure.NimbusCloudAccount;
+import com.vmware.devops.model.cloudassembly.infrastructure.NimbusCloudAccount.NimbusRegion;
 import com.vmware.devops.model.cloudassembly.infrastructure.Project;
 import com.vmware.devops.model.cloudassembly.infrastructure.VsphereCloudAccount;
 
@@ -45,15 +48,27 @@ public class InfrastructureGenerationTest extends GenerationTestBase {
                 .process(Utils.readFile(
                         "tests/cloudassembly/infrastructure/nimbusCloudAccountTest.groovy"));
 
+        NimbusCloudAccount mock = spy(account);
+        doReturn(List.of(
+                RegionInfo.builder()
+                        .name(NimbusRegion.SC.getRegionName())
+                        .regionId(NimbusRegion.SC.getId())
+                        .build(),
+                RegionInfo.builder()
+                        .name(NimbusRegion.WDC.getRegionName())
+                        .regionId(NimbusRegion.WDC.getId())
+                        .build()
+                )).when(mock).filterRegions(any());
+
         String output = SerializationUtils
-                .prettifyJson(SerializationUtils.toPrettyJson(account.getEndpoint()));
+                .prettifyJson(SerializationUtils.toPrettyJson(mock.getEndpoint()));
         String expectedOutput = Utils
                 .readFile(
                         "tests/cloudassembly/infrastructure/nimbusCloudAccountEndpointTestOutput.json");
         Assert.assertEquals(expectedOutput, output);
 
         output = SerializationUtils
-                .prettifyJson(SerializationUtils.toPrettyJson(account.getEndpointRegions()));
+                .prettifyJson(SerializationUtils.toPrettyJson(mock.getEndpointRegions()));
         expectedOutput = Utils
                 .readFile(
                         "tests/cloudassembly/infrastructure/nimbusCloudAccountRegionsTestOutput.json");
@@ -136,7 +151,7 @@ public class InfrastructureGenerationTest extends GenerationTestBase {
         doReturn(List.of(RegionInfo.builder()
                 .name("Datacenter")
                 .regionId("dummyId")
-                .build())).when(mock).filterEnabledRegions();
+                .build())).when(mock).filterRegions(account.getDatacenters());
 
         String output = SerializationUtils
                 .prettifyJson(SerializationUtils.toPrettyJson(mock.getEndpoint()));
@@ -150,6 +165,34 @@ public class InfrastructureGenerationTest extends GenerationTestBase {
         expectedOutput = Utils
                 .readFile(
                         "tests/cloudassembly/infrastructure/vsphereCloudAccountRegionsTestOutput.json");
+        Assert.assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    public void awsCloudAccountTest() throws IOException {
+        SpecProcessor specProcessor = new SpecProcessor();
+        AwsCloudAccount account = (AwsCloudAccount) specProcessor
+                .process(Utils.readFile(
+                        "tests/cloudassembly/infrastructure/awsCloudAccountTest.groovy"));
+
+        AwsCloudAccount mock = spy(account);
+        doReturn(List.of(RegionInfo.builder()
+                .name("eu-west-3")
+                .regionId("eu-west-3")
+                .build())).when(mock).filterRegions(account.getEnabledRegions());
+
+        String output = SerializationUtils
+                .prettifyJson(SerializationUtils.toPrettyJson(mock.getEndpoint()));
+        String expectedOutput = Utils
+                .readFile(
+                        "tests/cloudassembly/infrastructure/awsCloudAccountEndpointTestOutput.json");
+        Assert.assertEquals(expectedOutput, output);
+
+        output = SerializationUtils
+                .prettifyJson(SerializationUtils.toPrettyJson(mock.getEndpointRegions()));
+        expectedOutput = Utils
+                .readFile(
+                        "tests/cloudassembly/infrastructure/awsCloudAccountRegionsTestOutput.json");
         Assert.assertEquals(expectedOutput, output);
     }
 }

@@ -24,6 +24,7 @@ import com.vmware.devops.model.ReverseGenerationEntity;
 import com.vmware.devops.model.cloudassembly.design.CloudTemplate;
 import com.vmware.devops.model.cloudassembly.extensibility.Action;
 import com.vmware.devops.model.cloudassembly.extensibility.Subscription;
+import com.vmware.devops.model.cloudassembly.infrastructure.AwsCloudAccount;
 import com.vmware.devops.model.cloudassembly.infrastructure.FlavorMapping;
 import com.vmware.devops.model.cloudassembly.infrastructure.ImageMapping;
 import com.vmware.devops.model.cloudassembly.infrastructure.NimbusCloudAccount;
@@ -44,6 +45,7 @@ import com.vmware.devops.model.codestream.Variable;
 public class ReverseGenerate implements Callable<Integer> {
     private static List<Class<? extends ReverseGenerationEntity>> reverseGenerationEntities = List
             .of(
+                    //Cloud Assembly
                     CloudTemplate.class,
                     Project.class,
                     Action.class,
@@ -52,6 +54,8 @@ public class ReverseGenerate implements Callable<Integer> {
                     ImageMapping.class,
                     NimbusCloudAccount.class,
                     VsphereCloudAccount.class,
+                    AwsCloudAccount.class,
+                    // Codestream
                     Pipeline.class,
                     Variable.class,
                     AgentEndpoint.class,
