@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import com.vmware.devops.client.Client;
+import com.vmware.devops.client.catalog.CatalogClient;
 import com.vmware.devops.client.cloudassembly.design.DesignClient;
 import com.vmware.devops.client.cloudassembly.extensibility.ExtensibilityClient;
 import com.vmware.devops.client.cloudassembly.infrastructure.InfrastructureClient;
@@ -54,5 +55,10 @@ public class ClientTestBase {
     protected static ExtensibilityClient getExtensibilityClient()
             throws InterruptedException, IOException, URISyntaxException {
         return getClient().getCloudAssembly().getExtensibility();
+    }
+
+    protected static CatalogClient getCatalogClient()
+            throws InterruptedException, IOException, URISyntaxException {
+        return getClient().getCatalogClient();
     }
 }
