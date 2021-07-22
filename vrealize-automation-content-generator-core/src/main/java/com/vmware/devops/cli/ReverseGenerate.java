@@ -39,6 +39,7 @@ import com.vmware.devops.model.codestream.JenkinsEndpoint;
 import com.vmware.devops.model.codestream.JiraEndpoint;
 import com.vmware.devops.model.codestream.Pipeline;
 import com.vmware.devops.model.codestream.Variable;
+import com.vmware.devops.model.servicebroker.LeasePolicy;
 
 @Command(name = "reverseGenerate", mixinStandardHelpOptions = true,
         description = "Reverse generate the vRA models to groovy code.")
@@ -65,7 +66,9 @@ public class ReverseGenerate implements Callable<Integer> {
                     JiraEndpoint.class,
                     GerritEndpoint.class,
                     EmailEndpoint.class,
-                    GerritTrigger.class
+                    GerritTrigger.class,
+                    // Service Broker
+                    LeasePolicy.class
             );
 
     @Option(names = { "-o", "--output-path" },

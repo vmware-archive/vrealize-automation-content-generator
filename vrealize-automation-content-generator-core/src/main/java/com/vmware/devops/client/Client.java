@@ -27,9 +27,9 @@ import lombok.Getter;
 
 import com.vmware.devops.SerializationUtils;
 import com.vmware.devops.Utils;
-import com.vmware.devops.client.catalog.CatalogClient;
 import com.vmware.devops.client.cloudassembly.CloudAssemblyClient;
 import com.vmware.devops.client.codestream.CodestreamClient;
+import com.vmware.devops.client.servicebroker.ServiceBrokerClient;
 
 public class Client {
     public static final HttpClient HTTP_CLIENT = initializeHttpClient();
@@ -50,7 +50,7 @@ public class Client {
     private CloudAssemblyClient cloudAssembly;
 
     @Getter
-    private CatalogClient catalogClient;
+    private ServiceBrokerClient serviceBroker;
 
     @Getter
     private String refreshToken;
@@ -120,7 +120,7 @@ public class Client {
     public void initializeClients(String instance, String accessToken) {
         codestream = new CodestreamClient(instance, accessToken);
         cloudAssembly = new CloudAssemblyClient(instance, accessToken);
-        catalogClient = new CatalogClient(instance, accessToken);
+        serviceBroker = new ServiceBrokerClient(instance, accessToken);
     }
 
     public static String getUrlEncoddedBody(Map<String, String> parameters) {

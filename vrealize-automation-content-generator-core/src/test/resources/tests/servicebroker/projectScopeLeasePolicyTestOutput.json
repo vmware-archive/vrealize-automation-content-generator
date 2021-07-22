@@ -1,0 +1,11 @@
+{
+  "definition" : {
+    "leaseGrace" : 3,
+    "leaseTermMax" : 7,
+    "leaseTotalTermMax" : 128
+  },
+  "enforcementType" : "SOFT",
+  "name" : "test-policy",
+  "projectId" : "test-id",
+  "typeId" : "com.vmware.policy.deployment.lease"
+}

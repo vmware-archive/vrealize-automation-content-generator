@@ -58,5 +58,4 @@ public class DesignReverseGenerationTest {
         File script = new File(outputDir, "test-1-cloud-template-content.yaml");
         Assert.assertEquals(content, Utils.readFile(script.getAbsolutePath()));
     }
-
 }

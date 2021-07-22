@@ -384,7 +384,7 @@ public class Action implements GenerationEntity, ExtensibilityRunnable,
 
     @Override
     public String getTemplatePath() {
-        return "templates/cloudassembly/extensibility/actionReverseGenerate.groovy.template";
+        return "templates/cloudassembly/extensibility/actionReverseGenerate.groovy.peb";
     }
 
     @Override

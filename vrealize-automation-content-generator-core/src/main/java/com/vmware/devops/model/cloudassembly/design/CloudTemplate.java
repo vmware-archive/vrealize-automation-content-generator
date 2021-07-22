@@ -335,7 +335,7 @@ public class CloudTemplate
 
     @Override
     public String getTemplatePath() {
-        return "templates/cloudassembly/design/cloudTemplateReverseGenerate.groovy.template";
+        return "templates/cloudassembly/design/cloudTemplateReverseGenerate.groovy.peb";
     }
 
     @Override

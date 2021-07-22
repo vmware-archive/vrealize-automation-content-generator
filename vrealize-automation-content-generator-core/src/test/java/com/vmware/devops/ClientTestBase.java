@@ -9,11 +9,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import com.vmware.devops.client.Client;
-import com.vmware.devops.client.catalog.CatalogClient;
 import com.vmware.devops.client.cloudassembly.design.DesignClient;
 import com.vmware.devops.client.cloudassembly.extensibility.ExtensibilityClient;
 import com.vmware.devops.client.cloudassembly.infrastructure.InfrastructureClient;
 import com.vmware.devops.client.codestream.CodestreamClient;
+import com.vmware.devops.client.servicebroker.ServiceBrokerClient;
 
 public class ClientTestBase {
     private static Client client;
@@ -57,8 +57,8 @@ public class ClientTestBase {
         return getClient().getCloudAssembly().getExtensibility();
     }
 
-    protected static CatalogClient getCatalogClient()
+    protected static ServiceBrokerClient getServiceBrokerClient()
             throws InterruptedException, IOException, URISyntaxException {
-        return getClient().getCatalogClient();
+        return getClient().getServiceBroker();
     }
 }

@@ -30,6 +30,7 @@ import com.vmware.devops.client.cloudassembly.infrastructure.stubs.Region;
 import com.vmware.devops.client.codestream.stubs.CloudProxy;
 import com.vmware.devops.client.codestream.stubs.Pipeline;
 import com.vmware.devops.client.codestream.stubs.Variable;
+import com.vmware.devops.client.servicebroker.stubs.Policy;
 
 @Builder
 @Data
@@ -54,6 +55,8 @@ public class VraExportedData {
     List<CloudProxy> cloudProxies;
     List<com.vmware.devops.client.codestream.stubs.Endpoint> codestreamEndpoints;
     List<com.vmware.devops.client.codestream.stubs.GerritTrigger> gerritTriggers;
+    // Service Broker
+    List<Policy> policies;
 
     public VraExportedData(Client client)
             throws InterruptedException, IOException, URISyntaxException {
@@ -76,6 +79,7 @@ public class VraExportedData {
                 .getInfrastructure().getAllImageNames();
         endpoints = client.getCloudAssembly()
                 .getInfrastructure().getAllEndpoints();
+
         // Codestream
         pipelines = client.getCodestream().getAllPipelines();
         variables = client.getCodestream().getAllVariables();
@@ -88,5 +92,8 @@ public class VraExportedData {
             log.warn("Failed to fetch cloud proxies. This is expected to fail when running on-prem");
             cloudProxies = Collections.emptyList();
         }
+
+        //Service broker
+        policies = client.getServiceBroker().getAllPolicies();
     }
 }

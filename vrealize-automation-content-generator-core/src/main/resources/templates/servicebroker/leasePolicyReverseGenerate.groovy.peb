@@ -1,0 +1,13 @@
+import com.vmware.devops.client.servicebroker.stubs.Policy.EnforcementType
+import com.vmware.devops.model.servicebroker.LeasePolicy
+
+return LeasePolicy.builder()
+        .name("{{ entity.name }}")
+        .enforcementType(EnforcementType.{{ entity.enforcementType }})
+        .maxLease({{ entity.maxLease }})
+        .maxTotalLease({{ entity.maxTotalLease }})
+        .gracePeriod({{ entity.gracePeriod }})
+        {% if entity.project is not empty -%}
+        .project("{{ entity.project }}")
+        {% endif -%}
+        .build()

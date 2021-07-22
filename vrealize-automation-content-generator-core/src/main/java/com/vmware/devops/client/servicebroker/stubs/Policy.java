@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-package com.vmware.devops.client.catalog.stubs;
+package com.vmware.devops.client.servicebroker.stubs;
 
 import java.io.IOException;
 
@@ -55,7 +55,8 @@ public class Policy {
 
     @AllArgsConstructor
     public enum Type {
-        LEASE("com.vmware.policy.deployment.lease");
+        LEASE("com.vmware.policy.deployment.lease"),
+        QUOTA("com.vmware.policy.resource.quota");
 
         @Getter
         @JsonValue

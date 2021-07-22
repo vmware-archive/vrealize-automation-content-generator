@@ -167,7 +167,7 @@ public class Subscription
 
     @Override
     public String getTemplatePath() {
-        return "templates/cloudassembly/extensibility/subscriptionReverseGenerate.groovy.template";
+        return "templates/cloudassembly/extensibility/subscriptionReverseGenerate.groovy.peb";
     }
 
     @Override

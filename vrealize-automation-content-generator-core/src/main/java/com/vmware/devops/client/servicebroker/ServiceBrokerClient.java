@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-package com.vmware.devops.client.catalog;
+package com.vmware.devops.client.servicebroker;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -21,9 +21,9 @@ import lombok.NoArgsConstructor;
 import com.vmware.devops.SerializationUtils;
 import com.vmware.devops.Utils;
 import com.vmware.devops.client.Client;
-import com.vmware.devops.client.catalog.stubs.Policy;
+import com.vmware.devops.client.servicebroker.stubs.Policy;
 
-public class CatalogClient {
+public class ServiceBrokerClient {
     private static final String POLICIES_ENDPOINT = "policy/api/policies";
 
     @Getter
@@ -32,7 +32,7 @@ public class CatalogClient {
     @Getter
     private String accessToken;
 
-    public CatalogClient(String instance, String accessToken) {
+    public ServiceBrokerClient(String instance, String accessToken) {
         this.instance = instance;
         this.accessToken = accessToken;
     }
@@ -148,6 +148,29 @@ public class CatalogClient {
         }
 
         return null;
+    }
+
+    public List<Policy> getAllPolicies()
+            throws IOException, InterruptedException, URISyntaxException {
+        // TODO current implementation gets the the maximum allowed documents for one request - 200
+        // If there are more than 200 documents, proper pagination must be implemented
+        String queryParams = "?expandDefinition=true&size=200";
+        HttpRequest request = HttpRequest
+                .newBuilder(new URL(new URL(instance), POLICIES_ENDPOINT + queryParams).toURI())
+                .GET()
+                .header(Client.ACCEPT_HEADER, Client.CONTENT_TYPE_APPLICATION_JSON)
+                .header(Client.AUTHORIZATION_HEADER,
+                        Client.getAuthorizationHeaderValue(accessToken))
+                .build();
+        HttpResponse<String> data = Client.HTTP_CLIENT.send(request, BodyHandlers.ofString());
+        if (data.statusCode() != 200) {
+            throw new IllegalStateException(
+                    String.format("Failed to fetch all policies. Status code: %s Body: %s",
+                            data.statusCode(),
+                            data.body()));
+        }
+        return SerializationUtils
+                .fromJson(data.body(), new QueryPoliciesResponse()).getContent();
     }
 
     @Data
