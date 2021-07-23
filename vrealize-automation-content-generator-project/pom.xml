@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.vmware.devops</groupId>
         <artifactId>vrealize-automation-content-generator-parent</artifactId>
-        <version>1.1</version>
+        <version>1.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>vrealize-automation-content-generator-project</artifactId>
