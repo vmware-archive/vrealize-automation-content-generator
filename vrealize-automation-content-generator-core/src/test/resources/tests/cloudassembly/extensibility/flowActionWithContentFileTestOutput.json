@@ -1,6 +1,7 @@
 {
   "actionType" : "FLOW",
   "dependencies" : "",
+  "memoryInMB" : 300,
   "name" : "test-flow",
   "projectId" : "fakeId",
   "shared" : false,

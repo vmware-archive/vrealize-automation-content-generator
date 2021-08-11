@@ -33,6 +33,7 @@ public class Action {
     private Map<String, Object> inputs;
     private String dependencies;
     private int timeoutSeconds;
+    private int memoryInMB;
 
     public enum Type {
         SCRIPT,

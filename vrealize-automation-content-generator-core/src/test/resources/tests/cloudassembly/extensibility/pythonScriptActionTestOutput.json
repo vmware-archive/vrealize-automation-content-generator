@@ -7,6 +7,7 @@
     "i" : 1,
     "s" : "Hello"
   },
+  "memoryInMB" : 300,
   "name" : "test-action",
   "projectId" : "fakeId",
   "runtime" : "python",

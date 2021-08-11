@@ -21,6 +21,7 @@ return Action.builder()
         ])
         {% endif -%}
         .timeout({{entity.timeout}})
+        .memory({{entity.memory}})
         {% if entity.runtime is not empty -%}
         .runtime(Runtime.{{entity.runtime.name}})
         {% endif -%}

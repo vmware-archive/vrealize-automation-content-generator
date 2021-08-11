@@ -65,6 +65,7 @@ public class ExtensibilityReverseGenerationTest {
                         ))
                         .dependencies("x==1.0.0\ny >= 2.0.0")
                         .timeoutSeconds(6)
+                        .memoryInMB(450)
                         .build()
         ));
         data.setProjects(List.of(
@@ -110,6 +111,7 @@ public class ExtensibilityReverseGenerationTest {
                 .runtime(Runtime.PYTHON)
                 .shared(true)
                 .timeoutSeconds(6)
+                .memoryInMB(300)
                 .build();
 
         VraExportedData data = new VraExportedData();
@@ -176,6 +178,7 @@ public class ExtensibilityReverseGenerationTest {
                         .source(scriptSource)
                         .shared(false)
                         .timeoutSeconds(13)
+                        .memoryInMB(0)
                         .build()
         ));
         data.setProjects(List.of(

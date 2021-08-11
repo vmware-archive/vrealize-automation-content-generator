@@ -12,6 +12,7 @@ return Action.builder()
                 "k2": "true",
         ])
         .timeout(6)
+        .memory(450)
         .runtime(Runtime.PYTHON)
         .shared(true)
         .project("test-project")

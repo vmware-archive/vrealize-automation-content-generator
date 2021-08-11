@@ -57,6 +57,7 @@ public class Action implements GenerationEntity, ExtensibilityRunnable,
         ReverseGenerationEntity<com.vmware.devops.client.cloudassembly.extensibility.stubs.Action> {
     public static final String DEPENDENCIES_DELIMITER = "\n";
     public static final int DEFAULT_TIMEOUT = 600;
+    public static final int DEFAULT_MEMORY = 300;
 
     /**
      * Action runtime. Defaults to {@link Runtime#PYTHON}
@@ -104,6 +105,11 @@ public class Action implements GenerationEntity, ExtensibilityRunnable,
      * Action timeout in seconds. Defaults to {@link Action#DEFAULT_TIMEOUT}
      */
     private Integer timeout;
+
+    /**
+     * Memory in MB.  Defaults to {@link Action#DEFAULT_MEMORY}
+     */
+    private Integer memory;
 
     /**
      * Flow as object. This is serialized to YAML before send to vRA.
@@ -218,6 +224,7 @@ public class Action implements GenerationEntity, ExtensibilityRunnable,
                 .dependencies(dependencies.stream().map(Dependency::toString)
                         .collect(Collectors.joining(DEPENDENCIES_DELIMITER)))
                 .timeoutSeconds(Optional.ofNullable(timeout).orElse(DEFAULT_TIMEOUT))
+                .memoryInMB(Optional.ofNullable(memory).orElse(DEFAULT_MEMORY))
                 .build();
     }
 
@@ -357,6 +364,7 @@ public class Action implements GenerationEntity, ExtensibilityRunnable,
         shared = action.isShared();
         inputs = action.getInputs();
         timeout = action.getTimeoutSeconds();
+        memory = action.getMemoryInMB();
 
         if (action.getDependencies() != null && !action.getDependencies()
                 .trim()
