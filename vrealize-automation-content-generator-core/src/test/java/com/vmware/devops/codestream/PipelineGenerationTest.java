@@ -9,10 +9,12 @@ import java.io.IOException;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.vmware.devops.GenerationContext;
 import com.vmware.devops.GenerationTestBase;
+import com.vmware.devops.IdCache;
 import com.vmware.devops.SerializationUtils;
 import com.vmware.devops.SpecProcessor;
 import com.vmware.devops.Utils;
@@ -21,6 +23,11 @@ import com.vmware.devops.model.codestream.Pipeline;
 import com.vmware.devops.model.codestream.Variable;
 
 public class PipelineGenerationTest extends GenerationTestBase {
+
+    @Before
+    public void setup() {
+        IdCache.CODESTREAM_CLOUD_PROXY_ID_CACHE.getNameToId().put("testProxyName", "fakeId");
+    }
 
     @Test
     public void jenkinsTest() throws IOException {
@@ -114,6 +121,8 @@ public class PipelineGenerationTest extends GenerationTestBase {
         SpecProcessor specProcessor = new SpecProcessor();
         GenerationContext.getInstance().getGlobalConfiguration()
                 .setDefaultProject("defaultTestProjectName");
+        GenerationContext.getInstance().getGlobalConfiguration()
+                .setDefaultCloudProxy("testProxyName");
         Pipeline p = (Pipeline) specProcessor
                 .process(Utils.readFile("tests/codestream/pipelineNotificationTest.groovy"));
         Assert.assertEquals("testProjectName",

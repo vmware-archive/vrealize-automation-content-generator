@@ -16,6 +16,7 @@ import org.junit.Test;
 import com.vmware.devops.ReverseGenerationContext;
 import com.vmware.devops.TestUtils;
 import com.vmware.devops.Utils;
+import com.vmware.devops.client.codestream.stubs.CloudProxy;
 import com.vmware.devops.client.codestream.stubs.Notification;
 import com.vmware.devops.client.codestream.stubs.Notification.Event;
 import com.vmware.devops.client.codestream.stubs.Notification.WebhookNotificaton.WebhookAction;
@@ -43,6 +44,13 @@ public class PipelineReverseGenerationTest {
 
         String sshScript1 = "Hello world 1";
         String sshScript2 = "Hello world 2";
+
+        CloudProxy cloudProxy = CloudProxy.builder()
+                .id("proxy-id")
+                .customProperties(Map.of(
+                        CloudProxy.PROXY_NAME_KEY, "cloudProxyName")
+                )
+                .build();
 
         com.vmware.devops.client.codestream.stubs.Pipeline pipeline = com.vmware.devops.client.codestream.stubs.Pipeline
                 .builder()
@@ -259,7 +267,7 @@ public class PipelineReverseGenerationTest {
                         Notification.Type.WEBHOOK, List.of(
                                 Notification.WebhookNotificaton.WebhookNotificaton.builder()
                                         .action(WebhookAction.POST)
-                                        .cloudProxyId("cloudProxyId")
+                                        .cloudProxyId(cloudProxy.getId())
                                         .event(Event.STARTED)
                                         .headers(Map.of(
                                                 "k1", "v1",
@@ -275,6 +283,9 @@ public class PipelineReverseGenerationTest {
         VraExportedData vraExportedData = new VraExportedData();
         vraExportedData.setPipelines(List.of(
                 pipeline
+        ));
+        vraExportedData.setCloudProxies(List.of(
+                cloudProxy
         ));
         ReverseGenerationContext.getInstance().setVraExportedData(vraExportedData);
         ReverseGenerationContext.getInstance().setOutputDir(outputDir.getAbsolutePath());

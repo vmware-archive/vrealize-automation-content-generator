@@ -24,7 +24,7 @@
     } ],
     "webhook" : [ {
       "action" : "post",
-      "cloudProxyId" : "testCloudProxy",
+      "cloudProxyId" : "fakeId",
       "event" : "FAILURE",
       "headers" : { },
       "payload" : "testPayload",

@@ -5,9 +5,10 @@
 
 package com.vmware.devops.model.codestream;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import com.vmware.devops.GenerationContext;
+import com.vmware.devops.IdCache;
+import com.vmware.devops.ReverseGenerationContext;
+import com.vmware.devops.client.codestream.CodestreamClient;
 import com.vmware.devops.client.codestream.stubs.Notification.Event;
 import com.vmware.devops.client.codestream.stubs.Notification.Type;
 import com.vmware.devops.client.codestream.stubs.Notification.WebhookNotificaton;
@@ -35,10 +39,13 @@ public class WebhookNotification implements
      */
     private String url;
 
+
     /**
      * Id of the cloud proxy which to be used for the webhook
      */
-    private String cloudProxyId; // TODO: Use cloudProxyName
+    @Builder.Default
+    private String cloudProxy = GenerationContext.getInstance().getGlobalConfiguration()
+            .getDefaultCloudProxy();
 
     /**
      * Headers of the webhook.
@@ -78,23 +85,34 @@ public class WebhookNotification implements
 
     @Override
     public com.vmware.devops.client.codestream.stubs.Notification initializeNotification() {
+        String cloudProxyId = null;
+        if (cloudProxy != null) {
+            try {
+                cloudProxyId = IdCache.CODESTREAM_CLOUD_PROXY_ID_CACHE.getId(cloudProxy);
+            } catch (InterruptedException | IOException | URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return com.vmware.devops.client.codestream.stubs.Notification.WebhookNotificaton.builder()
                 .event(event)
                 .action(action)
                 .url(url)
                 .headers(headers)
                 .payload(payload)
-                .cloudProxyId(Optional.ofNullable(cloudProxyId).orElse(
-                        GenerationContext.getInstance().getGlobalConfiguration()
-                                .getDefaultCloudProxy()
-                ))
+                .cloudProxyId(cloudProxyId)
                 .build();
     }
 
     @Override
     public void populateData(WebhookNotificaton notification) {
         this.action = notification.getAction();
-        this.cloudProxyId = notification.getCloudProxyId();
+        if (notification.getCloudProxyId() != null) {
+            this.cloudProxy = CodestreamClient
+                    .getProxyName(ReverseGenerationContext.getInstance().getVraExportedData()
+                            .getCloudProxies().stream()
+                            .filter(c -> c.getId().equals(notification.getCloudProxyId())).findFirst()
+                            .get());
+        }
         this.event = notification.getEvent();
         this.headers = notification.getHeaders();
         this.payload = notification.getPayload();

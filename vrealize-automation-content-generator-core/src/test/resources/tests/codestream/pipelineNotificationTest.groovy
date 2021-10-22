@@ -10,7 +10,7 @@ import com.vmware.devops.model.codestream.*
 
 GenerationContext context = context
 context.globalConfiguration.defaultProject = "testProjectName"
-context.globalConfiguration.defaultCloudProxy = "testCloudProxy"
+context.globalConfiguration.defaultCloudProxy = "testProxyName"
 context.codestreamConfiguration.defaultEmailEndpoint = "my-email-endpoint"
 context.codestreamConfiguration.defaultJiraEndpoint = "my-jira-endpoint"
 

@@ -165,7 +165,7 @@ return Pipeline.builder()
                         .url("url")
                         .action(com.vmware.devops.client.codestream.stubs.Notification.WebhookNotificaton.WebhookAction.POST)
                         .payload("payload")
-                        .cloudProxyId("cloudProxyId")
+                        .cloudProxy("cloudProxyName")
                         .headers([
                                 "k1": "v1",
                                 "k2": "v2",

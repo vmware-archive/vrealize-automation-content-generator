@@ -245,7 +245,7 @@ return Pipeline.builder()
                         .url("{{ notification.url }}")
                         .action(com.vmware.devops.client.codestream.stubs.Notification.WebhookNotificaton.WebhookAction.{{ notification.action.name }})
                         .payload("{{ notification.payload }}")
-                        .cloudProxyId("{{ notification.cloudProxyId }}")
+                        .cloudProxy("{{ notification.cloudProxy }}")
                         {% if notification.headers is not empty -%}
                         .headers([
                                 {%- for header in notification.headers | sortMap %}
