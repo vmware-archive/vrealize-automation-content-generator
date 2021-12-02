@@ -30,9 +30,9 @@ public class Criteria {
     public Criteria and(Criteria c) {
         return new CompositeCriteria(this, c) {
             @Override
-            protected String compose() {
-                return Optional.ofNullable(checkForEmptyOperation())
-                        .orElse(String.format("(%s) && (%s)", getFirst(), getSecond()));
+            protected String compose(Criteria first, Criteria second) {
+                return Optional.ofNullable(checkForEmptyOperation(first, second))
+                        .orElse(String.format("(%s) && (%s)", first, second));
             }
         };
     }
@@ -44,9 +44,9 @@ public class Criteria {
     public Criteria or(Criteria c) {
         return new CompositeCriteria(this, c) {
             @Override
-            protected String compose() {
-                return Optional.ofNullable(checkForEmptyOperation())
-                        .orElse(String.format("(%s) || (%s)", getFirst(), getSecond()));
+            protected String compose(Criteria first, Criteria second) {
+                return Optional.ofNullable(checkForEmptyOperation(first, second))
+                        .orElse(String.format("(%s) || (%s)", first, second));
             }
         };
     }
@@ -100,32 +100,31 @@ public class Criteria {
         }
     }
 
-    @AllArgsConstructor
     public abstract static class CompositeCriteria extends Criteria {
-        @Getter
-        private Criteria first;
+        private String composed;
 
-        @Getter
-        private Criteria second;
+        public CompositeCriteria(Criteria first, Criteria second) {
+            composed = compose(first, second);
+        }
 
-        protected abstract String compose();
+        protected abstract String compose(Criteria first, Criteria second);
 
         @Override
         public String toString() {
-            return compose();
+            return composed;
         }
 
-        protected String checkForEmptyOperation() {
-            if (getFirst().toString().length() == 0 && getSecond().toString().length() == 0) {
+        protected String checkForEmptyOperation(Criteria first, Criteria second) {
+            if (first.toString().length() == 0 && second.toString().length() == 0) {
                 return EMPTY_CRITERIA.toString();
             }
 
-            if (getFirst().toString().length() == 0) {
-                return getSecond().toString();
+            if (first.toString().length() == 0) {
+                return second.toString();
             }
 
-            if (getSecond().toString().length() == 0) {
-                return getFirst().toString();
+            if (second.toString().length() == 0) {
+                return first.toString();
             }
 
             return null;

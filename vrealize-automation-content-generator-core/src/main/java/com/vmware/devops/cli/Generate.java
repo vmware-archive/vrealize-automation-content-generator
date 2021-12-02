@@ -95,8 +95,7 @@ public class Generate implements Callable<Integer> {
                         SpecProcessor specProcessor = new SpecProcessor();
                         Object o = specProcessor.process(content);
                         if (o instanceof List) {
-                            return ((List<GenerationEntity>) specProcessor
-                                    .process(content)).stream();
+                            return ((List<GenerationEntity>) o).stream();
                         } else if (o instanceof GenerationEntity) {
                             return Stream.of((GenerationEntity) o);
                         }
@@ -110,6 +109,7 @@ public class Generate implements Callable<Integer> {
                     return Stream.empty();
                 }).forEach(o -> {
                     try {
+                        log.info("Generating: " + o);
                         o.generate();
                     } catch (Exception e) {
                         log.error("Failed to generate object: " + o, e);
