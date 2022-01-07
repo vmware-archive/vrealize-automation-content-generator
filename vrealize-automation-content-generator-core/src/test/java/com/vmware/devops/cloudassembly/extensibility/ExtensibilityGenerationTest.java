@@ -97,6 +97,12 @@ public class ExtensibilityGenerationTest extends GenerationTestBase {
 
     @Test
     public void blueprintNameCriteriaTest() throws Exception {
+        // This ensures we don't make calls to fetch IDs when creating the criteria
+        new BlueprintNameCriteria("xxx")
+                .or(new BlueprintNameCriteria("yyy"))
+                .and(new BlueprintNameCriteria("zzz"))
+                .not();
+
         Assert.assertEquals("event.data.blueprintId == \"fakeId\"",
                 new BlueprintNameCriteria("testBlueprint").toString());
     }

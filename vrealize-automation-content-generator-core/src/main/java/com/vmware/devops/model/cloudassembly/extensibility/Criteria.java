@@ -5,23 +5,22 @@
 
 package com.vmware.devops.model.cloudassembly.extensibility;
 
-import java.util.Optional;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import com.vmware.devops.IdCache;
+import com.vmware.devops.Utils;
 import com.vmware.devops.client.cloudassembly.extensibility.stubs.Subscription.EventType;
 import com.vmware.devops.client.cloudassembly.extensibility.stubs.Subscription.ResourceAction;
 
 @NoArgsConstructor
 @AllArgsConstructor
 public class Criteria {
-    public static final Criteria EMPTY_CRITERIA = new Criteria();
+    public static final Criteria EMPTY_CRITERIA = new Criteria("");
 
     @Getter
-    private String criteria = "";
+    private String criteria;
 
     /**
      * @param c
@@ -31,8 +30,7 @@ public class Criteria {
         return new CompositeCriteria(this, c) {
             @Override
             protected String compose(Criteria first, Criteria second) {
-                return Optional.ofNullable(checkForEmptyOperation(first, second))
-                        .orElse(String.format("(%s) && (%s)", first, second));
+                return String.format("(%s) && (%s)", first, second);
             }
         };
     }
@@ -45,8 +43,7 @@ public class Criteria {
         return new CompositeCriteria(this, c) {
             @Override
             protected String compose(Criteria first, Criteria second) {
-                return Optional.ofNullable(checkForEmptyOperation(first, second))
-                        .orElse(String.format("(%s) || (%s)", first, second));
+                return String.format("(%s) || (%s)", first, second);
             }
         };
     }
@@ -55,7 +52,7 @@ public class Criteria {
      * @return criteria of "!(thisCriteria)"
      */
     public Criteria not() {
-        if (criteria.length() == 0) {
+        if (criteria == null || criteria.length() == 0) {
             return EMPTY_CRITERIA;
         }
 
@@ -101,33 +98,41 @@ public class Criteria {
     }
 
     public abstract static class CompositeCriteria extends Criteria {
+        private Criteria first;
+        private Criteria second;
         private String composed;
 
         public CompositeCriteria(Criteria first, Criteria second) {
-            composed = compose(first, second);
+            this.first = first;
+            this.second = second;
         }
 
         protected abstract String compose(Criteria first, Criteria second);
 
         @Override
-        public String toString() {
+        public synchronized String toString() {
+            if (composed == null) {
+                composed = checkForEmptyOperationAndCompose();
+            }
             return composed;
         }
 
-        protected String checkForEmptyOperation(Criteria first, Criteria second) {
-            if (first.toString().length() == 0 && second.toString().length() == 0) {
+        private String checkForEmptyOperationAndCompose() {
+            String firstString = first.toString();
+            String secondString = second.toString();
+            if (Utils.isEmpty(firstString) && Utils.isEmpty(secondString)) {
                 return EMPTY_CRITERIA.toString();
             }
 
-            if (first.toString().length() == 0) {
-                return second.toString();
+            if (Utils.isEmpty(firstString)) {
+                return secondString;
             }
 
-            if (second.toString().length() == 0) {
-                return first.toString();
+            if (Utils.isEmpty(secondString)) {
+                return firstString;
             }
 
-            return null;
+            return compose(first, second);
         }
     }
 }
