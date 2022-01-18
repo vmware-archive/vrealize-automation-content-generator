@@ -55,6 +55,9 @@ public class Client {
     @Getter
     private String refreshToken;
 
+    private String accessToken;
+    private long accessTokenExpirationTime;
+
     public Client(String loginInstance, String instance, String refreshToken)
             throws IOException, InterruptedException, URISyntaxException {
         this.refreshToken = refreshToken;
@@ -67,8 +70,8 @@ public class Client {
                 .newBuilder(new URL(new URL(loginInstance), LOGIN_ENDPOINT).toURI())
                 .POST(BodyPublishers
                         .ofString(SerializationUtils.toJson(Map.of(
-                                "username", username,
-                                "password", password
+                                        "username", username,
+                                        "password", password
                                 )
                         ))
                 )
@@ -96,25 +99,33 @@ public class Client {
         initializeClients(instance, accessToken);
     }
 
-    public String getAccessToken(String loginInstance, String refreshToken)
+    public synchronized String getAccessToken(String loginInstance, String refreshToken)
             throws IOException, InterruptedException, URISyntaxException {
-        HttpRequest request = HttpRequest
-                .newBuilder(new URL(new URL(loginInstance), AUTHORIZE_ENDPOINT).toURI())
-                .POST(BodyPublishers
-                        .ofString(getUrlEncoddedBody(Map.of("refresh_token", refreshToken))))
-                .header(ACCEPT_HEADER, CONTENT_TYPE_APPLICATION_JSON)
-                .header(CONTENT_TYPE_HEADER, CONTENT_TYPE_X_WWW_FORM_URLENCODED)
-                .build();
+        if (accessToken == null || System.currentTimeMillis() > accessTokenExpirationTime
+                - 5 * 60 * 1000) { // Renew token 5 minutes before expiration
+            HttpRequest request = HttpRequest
+                    .newBuilder(new URL(new URL(loginInstance), AUTHORIZE_ENDPOINT).toURI())
+                    .POST(BodyPublishers
+                            .ofString(getUrlEncoddedBody(Map.of("refresh_token", refreshToken))))
+                    .header(ACCEPT_HEADER, CONTENT_TYPE_APPLICATION_JSON)
+                    .header(CONTENT_TYPE_HEADER, CONTENT_TYPE_X_WWW_FORM_URLENCODED)
+                    .build();
 
-        HttpResponse<String> data = HTTP_CLIENT.send(request, BodyHandlers.ofString());
-        if (data.statusCode() != 200) {
-            throw new IllegalStateException(
-                    String.format("Failed to login. Status code: %s Body: %s", data.statusCode(),
-                            data.body()));
+            HttpResponse<String> data = HTTP_CLIENT.send(request, BodyHandlers.ofString());
+            if (data.statusCode() != 200) {
+                throw new IllegalStateException(
+                        String.format("Failed to login. Status code: %s Body: %s",
+                                data.statusCode(),
+                                data.body()));
+            }
+
+            AuthorizationResponse authorizationResponse = SerializationUtils
+                    .fromJson(data.body(), new AuthorizationResponse());
+            accessToken = authorizationResponse.accessToken;
+            accessTokenExpirationTime =
+                    System.currentTimeMillis() + authorizationResponse.expiresIn * 1000L;
         }
-
-        return SerializationUtils
-                .fromJson(data.body(), new AuthorizationResponse()).accessToken;
+        return accessToken;
     }
 
     public void initializeClients(String instance, String accessToken) {
@@ -137,6 +148,9 @@ public class Client {
 
         @JsonProperty("refresh_token")
         private String refreshToken;
+
+        @JsonProperty("expires_in")
+        private int expiresIn;
     }
 
     public static String getAuthorizationHeaderValue(String accessToken) {

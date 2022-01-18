@@ -55,7 +55,10 @@ public class CodestreamClientIT extends ClientTestBase {
     @Test
     public void loginTest() throws InterruptedException, IOException, URISyntaxException {
         CodestreamClient client = getCodestreamClient();
-        Assert.assertNotNull(client.getAccessToken());
+        String token = client.getAccessToken();
+        Assert.assertNotNull(token);
+        String newToken = client.getAccessToken();
+        Assert.assertEquals(token, newToken); // Assert token is cached
     }
 
     @Test
