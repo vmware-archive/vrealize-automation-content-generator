@@ -8,26 +8,39 @@ package com.vmware.devops.config;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 import com.vmware.devops.client.Client;
 
-@Data
 public class EndpointConfiguration {
+    @Getter
+    @Setter
     private String instance;
+
+    @Getter
+    @Setter
     private String loginInstance;
+
     private AuthenticationDetails authenticationDetails;
 
-    public Client getClient() throws InterruptedException, IOException, URISyntaxException {
-        if (authenticationDetails.refreshToken != null) {
-            return new Client(loginInstance, instance, authenticationDetails.refreshToken);
-        } else {
-            Client client = new Client(loginInstance, instance, authenticationDetails.username,
-                    authenticationDetails.password);
-            authenticationDetails.refreshToken = client.getRefreshToken();
-            return client;
+    private Client client;
+
+    public synchronized Client getClient()
+            throws InterruptedException, IOException, URISyntaxException {
+        if (client == null) {
+            if (authenticationDetails.refreshToken != null) {
+                client = new Client(loginInstance, instance, authenticationDetails.refreshToken);
+            } else {
+                client = new Client(loginInstance, instance, authenticationDetails.username,
+                        authenticationDetails.password);
+                synchronized (this) {
+                    authenticationDetails.refreshToken = client.getRefreshToken();
+                }
+            }
         }
+
+        return client;
     }
 
     public static class AuthenticationDetails {
@@ -48,5 +61,14 @@ public class EndpointConfiguration {
             this.username = username;
             this.password = password;
         }
+    }
+
+    public synchronized AuthenticationDetails getAuthenticationDetails() {
+        return authenticationDetails;
+    }
+
+    public synchronized void setAuthenticationDetails(
+            AuthenticationDetails authenticationDetails) {
+        this.authenticationDetails = authenticationDetails;
     }
 }
