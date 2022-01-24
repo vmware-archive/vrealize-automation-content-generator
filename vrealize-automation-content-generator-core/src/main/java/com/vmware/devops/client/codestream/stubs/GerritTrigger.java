@@ -45,7 +45,8 @@ public class GerritTrigger extends Entity {
 
         @AllArgsConstructor
         public enum EventType {
-            CHANGE_MERGED("change-merged");
+            CHANGE_MERGED("change-merged"),
+            DIRECT_GIT_PUSH("ref-updated");
 
             private String value;
 
