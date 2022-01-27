@@ -160,6 +160,10 @@ public class PipelineGenerationTest extends GenerationTestBase {
         Assert.assertEquals("password", variables.get(0).getValue());
         Assert.assertEquals("test-stage-1-task-2-ssh-task-pass-phrase", variables.get(1).getName());
         Assert.assertEquals("passphrase", variables.get(1).getValue());
+        Assert.assertEquals("test-stage-1-task-3-ssh-task-pass-phrase", variables.get(2).getName());
+        Assert.assertEquals("passphrase1", variables.get(2).getValue());
+        Assert.assertEquals("test-stage-1-task-4-ssh-task-pass-phrase", variables.get(3).getName());
+        Assert.assertEquals("passphrase2", variables.get(3).getValue());
     }
 
     @Test

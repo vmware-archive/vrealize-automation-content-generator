@@ -7,6 +7,7 @@ package tests.codestream
 
 import com.vmware.devops.GenerationContext
 import com.vmware.devops.model.codestream.Output
+import com.vmware.devops.model.codestream.ParallelTask
 import com.vmware.devops.model.codestream.Pipeline
 import com.vmware.devops.model.codestream.SshTask
 import com.vmware.devops.model.codestream.Stage
@@ -46,6 +47,22 @@ return Pipeline.builder()
                                         .scriptPath("tests/codestream/sshTestScript.sh")
                                         .workingDirectory("test")
                                         .build(),
+                                new ParallelTask([
+                                        SshTask.builder()
+                                                .name("task-3")
+                                                .host(sshHost)
+                                                .authentication(new SshTask.SshTaskAuthentication("username", "pkey", "passphrase1"))
+                                                .scriptPath("tests/codestream/sshTestScript.sh")
+                                                .workingDirectory("test")
+                                                .build(),
+                                        SshTask.builder()
+                                                .name("task-4")
+                                                .host(sshHost)
+                                                .authentication(new SshTask.SshTaskAuthentication("username", "pkey", "passphrase2"))
+                                                .scriptPath("tests/codestream/sshTestScript.sh")
+                                                .workingDirectory("test")
+                                                .build(),
+                                ])
                         ])
                         .build()
         ])

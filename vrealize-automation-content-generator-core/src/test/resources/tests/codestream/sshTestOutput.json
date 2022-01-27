@@ -16,7 +16,7 @@
   "stageOrder" : [ "stage-1" ],
   "stages" : {
     "stage-1" : {
-      "taskOrder" : [ "task-1", "task-2" ],
+      "taskOrder" : [ "task-1", "task-2", "task-3,task-4" ],
       "tasks" : {
         "task-1" : {
           "endpoints" : {
@@ -44,6 +44,38 @@
             "arguments" : [ ],
             "host" : "1.2.3.4",
             "passphrase" : "${var.test-stage-1-task-2-ssh-task-pass-phrase}",
+            "privatekey" : "pkey",
+            "script" : "echo",
+            "username" : "username",
+            "workingDirectory" : "test"
+          },
+          "type" : "SSH"
+        },
+        "task-3" : {
+          "endpoints" : {
+            "agent" : "testAgent"
+          },
+          "ignoreFailure" : false,
+          "input" : {
+            "arguments" : [ ],
+            "host" : "1.2.3.4",
+            "passphrase" : "${var.test-stage-1-task-3-ssh-task-pass-phrase}",
+            "privatekey" : "pkey",
+            "script" : "echo",
+            "username" : "username",
+            "workingDirectory" : "test"
+          },
+          "type" : "SSH"
+        },
+        "task-4" : {
+          "endpoints" : {
+            "agent" : "testAgent"
+          },
+          "ignoreFailure" : false,
+          "input" : {
+            "arguments" : [ ],
+            "host" : "1.2.3.4",
+            "passphrase" : "${var.test-stage-1-task-4-ssh-task-pass-phrase}",
             "privatekey" : "pkey",
             "script" : "echo",
             "username" : "username",

@@ -182,8 +182,8 @@ public class Pipeline implements GenerationEntity,
     }
 
     private Map<String, String> processInputs() {
-        List<Input> inlineInputs = stages.stream().flatMap(s -> s.getTasks().stream()).flatMap(
-                t -> {
+        List<Input> inlineInputs = stages.stream().flatMap(s -> s.getTasks().stream())
+                .flatMap(t -> {
                     if (t instanceof ParallelTask) {
                         return ((ParallelTask) t).getTasks().stream()
                                 .filter(WithInputs.class::isInstance)
@@ -243,15 +243,14 @@ public class Pipeline implements GenerationEntity,
         List<Variable> result = new ArrayList<>();
         for (Stage s : getStages()) {
             result.addAll(s.getTasks().stream()
-                    .filter(SshTask.class::isInstance)
                     .flatMap(t -> {
-                        SshTask sshTask = (SshTask) t;
-                        sshTask.setVariablePrefix(String.format("%s-%s", name, s.getName()));
-
-                        if (sshTask.getAuthentication().isUsernamePassword()) {
-                            return Stream.of(sshTask.initializePasswordVariable());
-                        } else if (sshTask.getAuthentication().getPassphrase() != null) {
-                            return Stream.of(sshTask.initializePassPhaseVariable());
+                        if (t instanceof ParallelTask) {
+                            return ((ParallelTask) t).getTasks().stream()
+                                    .filter(SshTask.class::isInstance)
+                                    .flatMap(innerTask -> Stream.of(
+                                            initializeSshTaskVariable(s, (SshTask) innerTask)));
+                        } else if (t instanceof SshTask) {
+                            return Stream.of(initializeSshTaskVariable(s, (SshTask) t));
                         }
 
                         return Stream.empty();
@@ -259,6 +258,17 @@ public class Pipeline implements GenerationEntity,
         }
 
         return result;
+    }
+
+    public Variable initializeSshTaskVariable(Stage stage, SshTask sshTask) {
+        sshTask.setVariablePrefix(String.format("%s-%s", name, stage.getName()));
+
+        if (sshTask.getAuthentication().isUsernamePassword()) {
+            return sshTask.initializePasswordVariable();
+        } else if (sshTask.getAuthentication().getPassphrase() != null) {
+            return sshTask.initializePassPhaseVariable();
+        }
+        return null;
     }
 
     private Map<String, String> processOutputs() {
