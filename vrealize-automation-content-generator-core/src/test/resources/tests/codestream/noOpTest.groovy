@@ -26,6 +26,7 @@ return Pipeline.builder()
                                         .job("job-1")
                                         .inputs([
                                                 new Input("localInput", "defaultValue"),
+                                                NoOpInput.INSTANCE,
                                                 new Input("pipelineInput", "defaultValue", true),
                                                 new Input("pipelineInput2", Input.builder()
                                                         .value("defaultValue2")
@@ -38,17 +39,24 @@ return Pipeline.builder()
                                         .build()
                                 ).filter(t -> true).orElse(NoOpTask.INSTANCE),
                                 new ParallelTask([
-                                        Optional.of((Task) JenkinsTask.builder()
+                                        Optional.of((CodestreamTask) JenkinsTask.builder()
                                                 .name("task-1-1")
                                                 .job("job-1")
                                                 .build()
                                         ).filter(t -> true).orElse(NoOpTask.INSTANCE),
-                                        Optional.of((Task) JenkinsTask.builder()
+                                        Optional.of((CodestreamTask) JenkinsTask.builder()
                                                 .name("task-2-2")
                                                 .job("job-2")
                                                 .build()
                                         ).filter(t -> false).orElse(NoOpTask.INSTANCE)
-                                ])
+                                ]),
+                                PipelineTask.builder()
+                                        .name("pipeline-task")
+                                        .inputs([
+                                                new Input("a", "b"),
+                                                NoOpInput.INSTANCE
+                                        ])
+                                        .build()
                         ])
                         .build()).filter(t -> true).orElse(NoOpStage.INSTANCE),
                 Optional.of(Stage.builder()

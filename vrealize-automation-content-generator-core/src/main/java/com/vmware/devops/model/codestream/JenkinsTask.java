@@ -96,7 +96,7 @@ public class JenkinsTask implements Task, CodestreamTask, WithInputs, WithOutput
                 .input(JenkinsInput.builder()
                         .job(job)
                         .jobFolder(jobFolder)
-                        .parameters(inputs.stream()
+                        .parameters(inputs.stream().filter(i -> !(i instanceof NoOpInput))
                                 .collect(Collectors
                                         .toMap(Input::getKey,
                                                 i -> Optional.ofNullable(i.getValue()).orElse("")

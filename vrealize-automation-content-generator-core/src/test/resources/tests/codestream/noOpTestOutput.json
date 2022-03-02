@@ -20,8 +20,18 @@
   "stageOrder" : [ "stage-1" ],
   "stages" : {
     "stage-1" : {
-      "taskOrder" : [ "task-1", "task-1-1" ],
+      "taskOrder" : [ "task-1", "task-1-1", "pipeline-task" ],
       "tasks" : {
+        "pipeline-task" : {
+          "ignoreFailure" : false,
+          "input" : {
+            "inputProperties" : {
+              "a" : "b"
+            },
+            "pipeline" : "pipeline-task"
+          },
+          "type" : "Pipeline"
+        },
         "task-1" : {
           "endpoints" : {
             "jenkinsServer" : "my-jenkins-endpoint"

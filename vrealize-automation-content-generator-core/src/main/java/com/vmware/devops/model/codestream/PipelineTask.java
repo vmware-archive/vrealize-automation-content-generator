@@ -78,7 +78,7 @@ public class PipelineTask implements Task, CodestreamTask, WithInputs, WithOutpu
                 .ignoreFailure(ignoreFailure)
                 .input(PipelineInput.builder()
                         .pipeline(Optional.ofNullable(pipeline).orElse(name))
-                        .inputProperties(inputs.stream()
+                        .inputProperties(inputs.stream().filter(i -> !(i instanceof NoOpInput))
                                 .collect(Collectors
                                         .toMap(Input::getKey, i -> i.getValue().toString())))
                         .build())
