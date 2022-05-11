@@ -82,6 +82,11 @@ public class Input {
                     "", true);
         }
 
+        public static final Input gerritEventAccountUsername() {
+            return new Input("GERRIT_EVENT_ACCOUNT_USERNAME",
+                    "", true);
+        }
+
         public static final Input gerritEventCreatedOn() {
             return new Input("GERRIT_EVENT_CREATED_ON",
                     "", true);
