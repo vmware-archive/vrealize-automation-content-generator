@@ -548,7 +548,7 @@ public class InfrastructureClient {
                 .newBuilder(
                         new URL(new URL(instance), IMAGE_NAMES_ENDPOINT + "?view=list&$filter=" +
                                 Utils.urlEncode(
-                                        String.format("imageMappingNormalized.item eq '%s'", name)))
+                                        String.format("imageMappingNormalized.item eq '%s'", name.toLowerCase())))
                                 .toURI())
                 .GET()
                 .header(Client.AUTHORIZATION_HEADER,
