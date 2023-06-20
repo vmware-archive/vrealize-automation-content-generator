@@ -70,6 +70,8 @@ import com.vmware.devops.model.codestream.*
                                                 {%- endfor %}
                                         ])
                                         .expirationInDays({{ task.expirationInDays }})
+                                        .expiration({{ task.expiration }})
+                                        .expirationUnit("{{ task.expirationUnit }}")
                                         .sendEmail({{ task.sendEmail }})
                                         .endpoint("{{ task.endpoint }}")
                                         .build(),

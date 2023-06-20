@@ -119,6 +119,8 @@ return Pipeline.builder()
                                                 "approver2",
                                         ])
                                         .expirationInDays(3)
+                                        .expiration(3)
+                                        .expirationUnit("DAYS")
                                         .sendEmail(true)
                                         .endpoint("email")
                                         .build(),

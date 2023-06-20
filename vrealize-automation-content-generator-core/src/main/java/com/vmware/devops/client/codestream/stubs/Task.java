@@ -152,6 +152,8 @@ public class Task {
         private String description;
         private boolean sendemail;
         private int expirationInDays;
+        private int expiration;
+        private String expirationUnit;
     }
 
     @Data

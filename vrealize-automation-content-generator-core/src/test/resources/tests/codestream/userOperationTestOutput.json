@@ -24,7 +24,9 @@
           "input" : {
             "approvers" : [ "koko", "koko-1" ],
             "description" : "my-description",
+            "expiration" : 3,
             "expirationInDays" : 3,
+            "expirationUnit" : "DAYS",
             "sendemail" : true,
             "summary" : "my-summary"
           },

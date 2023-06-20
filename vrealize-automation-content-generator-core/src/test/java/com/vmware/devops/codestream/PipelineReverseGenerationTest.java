@@ -131,6 +131,8 @@ public class PipelineReverseGenerationTest {
                                                         ))
                                                         .summary("summary")
                                                         .expirationInDays(3)
+                                                        .expiration(3)
+                                                        .expirationUnit("DAYS")
                                                         .description("description")
                                                         .sendemail(true)
                                                         .build()

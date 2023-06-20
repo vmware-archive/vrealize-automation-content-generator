@@ -86,6 +86,14 @@ public class UserOperationTask implements Task, CodestreamTask {
      * The number of days in which the user operation will expire.
      */
     private Integer expirationInDays;
+    /**
+     * The time after which this entity would expire based on 'expirationUnit'
+     */
+    private Integer expiration;
+    /**
+     * Time unit for the value specified in 'expiration'
+     */
+    private String expirationUnit;
 
     @Override
     public com.vmware.devops.client.codestream.stubs.Task initializeTask() {
@@ -100,6 +108,8 @@ public class UserOperationTask implements Task, CodestreamTask {
                         .description(description)
                         .sendemail(Optional.ofNullable(sendEmail).orElse(false))
                         .expirationInDays(Optional.ofNullable(expirationInDays).orElse(3))
+                        .expiration(Optional.ofNullable(expiration).orElse(3))
+                        .expirationUnit(Optional.ofNullable(expirationUnit).orElse("DAYS"))
                         .build())
                 .build();
 
@@ -125,6 +135,8 @@ public class UserOperationTask implements Task, CodestreamTask {
         this.approvers = input.getApprovers();
         this.description = input.getDescription();
         this.expirationInDays = input.getExpirationInDays();
+        this.expiration = input.getExpiration();
+        this.expirationUnit = input.getExpirationUnit();
         this.sendEmail = input.isSendemail();
         this.summary = input.getSummary();
     }

@@ -56,7 +56,8 @@ public class Policy {
     @AllArgsConstructor
     public enum Type {
         LEASE("com.vmware.policy.deployment.lease"),
-        QUOTA("com.vmware.policy.resource.quota");
+        QUOTA("com.vmware.policy.resource.quota"),
+        ENTITLEMENT("com.vmware.policy.catalog.entitlement");
 
         @Getter
         @JsonValue
