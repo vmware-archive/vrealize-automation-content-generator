@@ -97,6 +97,10 @@ public class UserOperationTask implements Task, CodestreamTask {
 
     @Override
     public com.vmware.devops.client.codestream.stubs.Task initializeTask() {
+        int expInDays = Optional.ofNullable(expirationInDays).orElse(3);
+        if (null == expirationInDays && null != expiration && null != expirationUnit) {
+            expInDays = 0;
+        }
         com.vmware.devops.client.codestream.stubs.Task result = com.vmware.devops.client.codestream.stubs.Task
                 .builder()
                 .type(getType())
@@ -107,9 +111,9 @@ public class UserOperationTask implements Task, CodestreamTask {
                         .summary(summary)
                         .description(description)
                         .sendemail(Optional.ofNullable(sendEmail).orElse(false))
-                        .expirationInDays(Optional.ofNullable(expirationInDays).orElse(3))
-                        .expiration(Optional.ofNullable(expiration).orElse(3))
-                        .expirationUnit(Optional.ofNullable(expirationUnit).orElse("DAYS"))
+                        .expirationInDays(expInDays)
+                        .expiration(Optional.ofNullable(expiration).orElse(0))
+                        .expirationUnit(expirationUnit)
                         .build())
                 .build();
 
@@ -134,8 +138,12 @@ public class UserOperationTask implements Task, CodestreamTask {
         this.preCondition = task.getPreCondition();
         this.approvers = input.getApprovers();
         this.description = input.getDescription();
-        this.expirationInDays = input.getExpirationInDays();
-        this.expiration = input.getExpiration();
+        if (input.getExpirationInDays() != 0) {
+            this.expirationInDays = input.getExpirationInDays();
+        }
+        if (input.getExpiration() != 0) {
+            this.expiration = input.getExpiration();
+        }
         this.expirationUnit = input.getExpirationUnit();
         this.sendEmail = input.isSendemail();
         this.summary = input.getSummary();

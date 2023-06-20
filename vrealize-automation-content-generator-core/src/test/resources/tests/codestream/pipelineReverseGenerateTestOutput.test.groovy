@@ -119,8 +119,21 @@ return Pipeline.builder()
                                                 "approver2",
                                         ])
                                         .expirationInDays(3)
+                                        .sendEmail(true)
+                                        .endpoint("email")
+                                        .build(),
+                                UserOperationTask.builder()
+                                        .name("user-operation-2")
+                                        .preCondition("pre-condition")
+                                        .ignoreFailure(false)
+                                        .summary("summary")
+                                        .description("description")
+                                        .approvers([
+                                                "approver3",
+                                                "approver4",
+                                        ])
                                         .expiration(3)
-                                        .expirationUnit("DAYS")
+                                        .expirationUnit("HOURS")
                                         .sendEmail(true)
                                         .endpoint("email")
                                         .build(),

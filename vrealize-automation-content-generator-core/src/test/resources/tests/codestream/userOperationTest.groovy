@@ -30,6 +30,18 @@ return Pipeline.builder()
                                         ])
                                         .summary("my-summary")
                                         .description("my-description")
+                                        .build(),
+                                UserOperationTask.builder()
+                                        .name("my-approval-2")
+                                        .sendEmail(true)
+                                        .approvers([
+                                                "koko",
+                                                "koko-1"
+                                        ])
+                                        .expiration(3)
+                                        .expirationUnit("HOURS")
+                                        .summary("my-summary")
+                                        .description("my-description")
                                         .build()
                         ])
                         .build()

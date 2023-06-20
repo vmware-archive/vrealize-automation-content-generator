@@ -131,8 +131,26 @@ public class PipelineReverseGenerationTest {
                                                         ))
                                                         .summary("summary")
                                                         .expirationInDays(3)
+                                                        .description("description")
+                                                        .sendemail(true)
+                                                        .build()
+                                                )
+                                                .endpoints(Map.of(
+                                                        EndpointKeys.EMAIL_SERVER, "email"
+                                                ))
+                                                .preCondition("pre-condition")
+                                                .ignoreFailure(false)
+                                                .build(),
+                                        "user-operation-2", Task.builder()
+                                                .type(Type.USER_OPERATION)
+                                                .input(UserOperationInput.builder()
+                                                        .approvers(List.of(
+                                                                "approver3",
+                                                                "approver4"
+                                                        ))
+                                                        .summary("summary")
                                                         .expiration(3)
-                                                        .expirationUnit("DAYS")
+                                                        .expirationUnit("HOURS")
                                                         .description("description")
                                                         .sendemail(true)
                                                         .build()
@@ -179,7 +197,7 @@ public class PipelineReverseGenerationTest {
                                         "jenkins",
                                         "poll",
                                         "rest",
-                                        "user-operation,condition",
+                                        "user-operation,user-operation-2,condition",
                                         "pipeline"
                                 ))
                                 .build(),

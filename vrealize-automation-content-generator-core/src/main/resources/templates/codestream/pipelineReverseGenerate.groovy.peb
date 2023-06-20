@@ -69,9 +69,15 @@ import com.vmware.devops.model.codestream.*
                                                 "{{ approver }}",
                                                 {%- endfor %}
                                         ])
+                                        {% if task.expirationInDays is not null -%}
                                         .expirationInDays({{ task.expirationInDays }})
+                                        {% endif -%}
+                                        {% if task.expiration is not null -%}
                                         .expiration({{ task.expiration }})
+                                        {% endif -%}
+                                        {% if task.expirationUnit is not null -%}
                                         .expirationUnit("{{ task.expirationUnit }}")
+                                        {% endif -%}
                                         .sendEmail({{ task.sendEmail }})
                                         .endpoint("{{ task.endpoint }}")
                                         .build(),
