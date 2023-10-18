@@ -171,9 +171,22 @@ public class Pipeline implements GenerationEntity,
         }
 
         com.vmware.devops.client.codestream.stubs.Pipeline pipeline = initializePipeline();
-        pipeline = GenerationContext.getInstance().getEndpointConfiguration().getClient()
-                .getCodestream()
-                .createOrUpdatePipeline(pipeline);
+        int retryCount = Integer.getInteger("pipeline.createOrUpdate.retryCount", 1);
+
+        do {
+            retryCount--;
+            try {
+                pipeline = GenerationContext.getInstance().getEndpointConfiguration().getClient()
+                        .getCodestream()
+                        .createOrUpdatePipeline(pipeline);
+            } catch (Exception e) {
+                if (retryCount > 0) {
+                    log.error("Failed to create or update pipeline, will retry", e);
+                } else {
+                    throw e;
+                }
+            }
+        } while (retryCount > 0);
 
         expandTriggers(pipeline);
         for (Trigger t : triggers) {
